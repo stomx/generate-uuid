@@ -57,7 +57,7 @@
   box-sizing: border-box;
 }
 
-/* 전역 포커스 스타일: outline/ring 비활성화, border로만 표시 */
+/* 전역 포커스 스타일: 기본 outline 비활성화 (컴포넌트에서 개별 구현) */
 *:focus {
   outline: none !important;
 }

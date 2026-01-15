@@ -233,7 +233,7 @@ export function UuidGenerator() {
       </div>
 
       {/* Action buttons - 고정, padding으로 focus shadow 공간 확보 */}
-      <div className="flex gap-3 shrink-0 p-1.5 -m-1.5">
+      <div className="flex gap-3 shrink-0 p-1 -m-1">
         <Button
           data-testid="copy-btn"
           onClick={handleCopyAll}

@@ -22,7 +22,7 @@ interface VersionSelectorProps {
 
 export function VersionSelector({ selected, onChange }: VersionSelectorProps) {
   return (
-    <div role="radiogroup" aria-label="UUID 버전 선택" className="flex gap-2 p-1 -m-1">
+    <div role="radiogroup" aria-label="UUID 버전 선택" className="flex gap-2 p-1.5 -m-1.5">
       {VERSIONS.map((version) => {
         const isSelected = selected === version.id;
         return (

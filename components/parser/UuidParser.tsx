@@ -70,7 +70,7 @@ export function UuidParser() {
   return (
     <div className="space-y-6">
       {/* 입력 필드 */}
-      <div className="flex gap-2 p-1.5 -m-1.5">
+      <div className="flex gap-2 p-1 -m-1">
         <Input
           ref={inputRef}
           placeholder="파싱할 UUID를 입력하세요..."
