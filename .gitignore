@@ -34,3 +34,26 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.playwright-mcp/100dvh-single-final.png
+.playwright-mcp/100dvh-single.png
+.playwright-mcp/100dvh-twenty.png
+.playwright-mcp/cursor-fixed.png
+.playwright-mcp/cursor-fixed2.png
+.playwright-mcp/dark-mode-final.png
+.playwright-mcp/final-ui.png
+.playwright-mcp/five-uuids.png
+.playwright-mcp/fixed-height-single.png
+.playwright-mcp/fixed-height-ten.png
+.playwright-mcp/individual-copy.png
+.playwright-mcp/layout-shift-test-1.png
+.playwright-mcp/layout-shift-test-10.png
+.playwright-mcp/layout-shift-test-back-to-1.png
+.playwright-mcp/light-mode-final.png
+.playwright-mcp/light-mode-updated.png
+.playwright-mcp/light-mode.png
+.playwright-mcp/parser-test.png
+.playwright-mcp/single-uuid.png
+.playwright-mcp/ten-uuids.png
+.playwright-mcp/terminal-noir-design.png
+.playwright-mcp/updated-ui.png
+.playwright-mcp/validator-test.png
