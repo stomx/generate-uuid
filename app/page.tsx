@@ -1,101 +1,165 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Card } from '@/components/ui';
+import { TabNav, ThemeToggle, ErrorBoundary } from '@/components/common';
+import type { TabId } from '@/components/common';
+import { UuidGenerator } from '@/components/generator';
+import { UuidValidator } from '@/components/validator';
+import { UuidParser } from '@/components/parser';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [activeTab, setActiveTab] = useState<TabId>('generator');
+  const [mounted, setMounted] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 키보드 단축키
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 입력 필드에서는 무시
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      if (e.key === '1') {
+        e.preventDefault();
+        setActiveTab('generator');
+      }
+      if (e.key === '2') {
+        e.preventDefault();
+        setActiveTab('validator');
+      }
+      if (e.key === '3') {
+        e.preventDefault();
+        setActiveTab('parser');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  return (
+    <main className="h-dvh bg-bg-deep flex flex-col overflow-hidden">
+      {/* 100dvh 레이아웃: 헤더/푸터 고정, 메인 영역 flex-1 */}
+
+      <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
+        <div className="max-w-2xl mx-auto w-full flex flex-col h-full">
+          {/* 헤더 - 고정 높이 */}
+          <header className={`
+            flex items-center justify-between pb-4 shrink-0
+            ${mounted ? 'animate-fade-in' : 'opacity-0'}
+          `}>
+            <div className="flex items-center gap-4">
+              {/* 로고/타이틀 */}
+              <h1 className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
+                <span className="text-accent-mint">UUID</span>
+                <span className="text-text-primary">::</span>
+                <span className="text-text-secondary">GEN</span>
+              </h1>
+
+              {/* 버전 배지 */}
+              <span className="hidden sm:inline-flex px-2 py-0.5 text-xs font-mono uppercase border border-border-subtle text-text-muted">
+                v1.0.0
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* 상태 표시 */}
+              <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-text-muted">
+                <span className="w-2 h-2 rounded-full bg-accent-mint animate-pulse" />
+                <span>ONLINE</span>
+              </div>
+
+              <ThemeToggle />
+            </div>
+          </header>
+
+          {/* 메인 컨테이너 - flex-1로 남은 공간 채움 */}
+          <div className={`
+            flex-1 flex flex-col min-h-0
+            ${mounted ? 'animate-fade-in' : 'opacity-0'}
+          `} style={{ animationDelay: '100ms' }}>
+            {/* 터미널 스타일 헤더 */}
+            <div className="flex items-center justify-between px-4 py-2 bg-bg-elevated border border-border-subtle border-b-0 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-accent-red/80" />
+                <span className="w-3 h-3 rounded-full bg-accent-amber/80" />
+                <span className="w-3 h-3 rounded-full bg-accent-mint/80" />
+              </div>
+              <span className="text-text-muted font-mono text-xs">
+                ~/uuid-generator
+              </span>
+            </div>
+
+            {/* 메인 카드 - flex-1로 확장, 내부 스크롤 */}
+            <Card className="p-4 sm:p-6 border-t-0 flex-1 flex flex-col min-h-0">
+              {/* 탭 네비게이션 */}
+              <nav className="mb-4 shrink-0">
+                <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+              </nav>
+
+              {/* 탭 패널 - 내부 스크롤 */}
+              <ErrorBoundary>
+                <div
+                  role="tabpanel"
+                  id={`panel-${activeTab}`}
+                  aria-labelledby={`tab-${activeTab}`}
+                  className="flex-1 overflow-y-auto min-h-0"
+                >
+                  {activeTab === 'generator' && <UuidGenerator />}
+                  {activeTab === 'validator' && <UuidValidator />}
+                  {activeTab === 'parser' && <UuidParser />}
+                </div>
+              </ErrorBoundary>
+            </Card>
+          </div>
+
+          {/* 푸터 - 고정 높이 */}
+          <footer className={`
+            pt-4 text-center shrink-0
+            ${mounted ? 'animate-fade-in' : 'opacity-0'}
+          `} style={{ animationDelay: '200ms' }}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-text-muted font-mono text-xs">
+              <span className="flex items-center gap-2">
+                <span className="text-accent-cyan">v1</span>
+                <span className="text-text-muted/50">/</span>
+                <span className="text-accent-amber">v4</span>
+                <span className="text-text-muted/50">/</span>
+                <span className="text-accent-mint">v7</span>
+              </span>
+              <span className="hidden sm:inline text-text-muted/30">|</span>
+              <a
+                href="https://www.rfc-editor.org/rfc/rfc9562.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-muted hover:text-accent-mint transition-colors underline underline-offset-2"
+              >
+                RFC 9562
+              </a>
+            </div>
+
+            {/* 키보드 단축키 힌트 */}
+            <div className="mt-2 flex items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
+              <span>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">1</kbd>
+                <span className="ml-1">GEN</span>
+              </span>
+              <span>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">2</kbd>
+                <span className="ml-1">VAL</span>
+              </span>
+              <span>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">3</kbd>
+                <span className="ml-1">PARSE</span>
+              </span>
+            </div>
+          </footer>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }
