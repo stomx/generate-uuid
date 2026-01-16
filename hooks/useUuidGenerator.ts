@@ -44,7 +44,7 @@ export function useUuidGenerator(): UseUuidGeneratorReturn {
 
     // 히스토리에 추가
     const newItems: UuidHistoryItem[] = newUuids.map((uuid) => ({
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       uuid,
       version,
       createdAt: new Date().toISOString(),
