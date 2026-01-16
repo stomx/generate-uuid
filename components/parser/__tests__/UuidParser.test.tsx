@@ -1,8 +1,39 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { UuidParser } from '../UuidParser';
 
+// localStorage 모킹
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+});
+
+// crypto.randomUUID 모킹
+vi.stubGlobal('crypto', {
+  ...crypto,
+  randomUUID: vi.fn(() => 'mock-uuid-id'),
+});
+
 describe('UuidParser', () => {
+  beforeEach(() => {
+    localStorageMock.clear();
+    vi.clearAllMocks();
+  });
   it('입력 필드가 렌더링되어야 함', () => {
     render(<UuidParser />);
     expect(
@@ -130,6 +161,145 @@ describe('UuidParser', () => {
 
     await waitFor(() => {
       expect(screen.getByText('SUCCESS')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('UuidParser 히스토리', () => {
+  beforeEach(() => {
+    localStorageMock.clear();
+    vi.clearAllMocks();
+  });
+
+  it('파싱 후 히스토리에 추가되어야 함', async () => {
+    render(<UuidParser />);
+
+    const input = screen.getByPlaceholderText('파싱할 UUID를 입력하세요...');
+    fireEvent.change(input, {
+      target: { value: '550e8400-e29b-41d4-a716-446655440000' },
+    });
+
+    const parseBtn = screen.getByText('[ PARSE ]');
+    fireEvent.click(parseBtn);
+
+    await waitFor(() => {
+      // 히스토리 섹션이 표시됨
+      expect(screen.getByText('// PARSE_HISTORY')).toBeInTheDocument();
+      // localStorage에 저장됨
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'uuid-parse-history',
+        expect.any(String)
+      );
+    });
+  });
+
+  it('히스토리 카운트가 표시되어야 함', async () => {
+    render(<UuidParser />);
+
+    // 초기 상태 - 빈 히스토리
+    expect(screen.getByText('[0]')).toBeInTheDocument();
+
+    const input = screen.getByPlaceholderText('파싱할 UUID를 입력하세요...');
+    fireEvent.change(input, {
+      target: { value: '550e8400-e29b-41d4-a716-446655440000' },
+    });
+
+    const parseBtn = screen.getByText('[ PARSE ]');
+    fireEvent.click(parseBtn);
+
+    await waitFor(() => {
+      // 히스토리 추가 후 카운트 증가
+      expect(screen.getByText('[1]')).toBeInTheDocument();
+    });
+  });
+
+  it('히스토리 Clear All 버튼이 동작해야 함', async () => {
+    render(<UuidParser />);
+
+    const input = screen.getByPlaceholderText('파싱할 UUID를 입력하세요...');
+    fireEvent.change(input, {
+      target: { value: '550e8400-e29b-41d4-a716-446655440000' },
+    });
+
+    const parseBtn = screen.getByText('[ PARSE ]');
+    fireEvent.click(parseBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('[1]')).toBeInTheDocument();
+    });
+
+    // Clear All 버튼 클릭
+    const clearAllBtn = screen.getByRole('button', { name: /clear/i });
+    fireEvent.click(clearAllBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('[0]')).toBeInTheDocument();
+      expect(screen.getByText('No parse history yet')).toBeInTheDocument();
+    });
+  });
+
+  it('히스토리 아이템 삭제([RM]) 버튼이 동작해야 함', async () => {
+    render(<UuidParser />);
+
+    const input = screen.getByPlaceholderText('파싱할 UUID를 입력하세요...');
+    fireEvent.change(input, {
+      target: { value: '550e8400-e29b-41d4-a716-446655440000' },
+    });
+
+    const parseBtn = screen.getByText('[ PARSE ]');
+    fireEvent.click(parseBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('[1]')).toBeInTheDocument();
+    });
+
+    // [RM] 버튼 클릭
+    const removeBtn = screen.getByLabelText('히스토리에서 삭제');
+    fireEvent.click(removeBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('[0]')).toBeInTheDocument();
+    });
+  });
+
+  it('빈 히스토리 상태에서 Clear All 버튼이 비활성화되어야 함', () => {
+    render(<UuidParser />);
+
+    const clearAllBtn = screen.getByRole('button', { name: /clear/i });
+    expect(clearAllBtn).toBeDisabled();
+  });
+
+  it('에러 결과도 히스토리에 추가되어야 함', async () => {
+    render(<UuidParser />);
+
+    const input = screen.getByPlaceholderText('파싱할 UUID를 입력하세요...');
+    fireEvent.change(input, {
+      target: { value: 'invalid-uuid' },
+    });
+
+    const parseBtn = screen.getByText('[ PARSE ]');
+    fireEvent.click(parseBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('[1]')).toBeInTheDocument();
+      // 히스토리 아이템에 [ERROR] 표시
+      expect(screen.getAllByText('[ERROR]').length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  it('성공한 파싱 결과가 히스토리에 [PARSED]로 표시되어야 함', async () => {
+    render(<UuidParser />);
+
+    const input = screen.getByPlaceholderText('파싱할 UUID를 입력하세요...');
+    fireEvent.change(input, {
+      target: { value: '550e8400-e29b-41d4-a716-446655440000' },
+    });
+
+    const parseBtn = screen.getByText('[ PARSE ]');
+    fireEvent.click(parseBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('[PARSED]')).toBeInTheDocument();
     });
   });
 });
