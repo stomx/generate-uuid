@@ -27,6 +27,7 @@ export function TabNav({ activeTab, onTabChange }: TabNavProps) {
         <button
           key={tab.id}
           role="tab"
+          data-testid={`tab-${tab.id}`}
           aria-selected={activeTab === tab.id}
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}

@@ -1,12 +1,34 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { Card } from '@/components/ui';
 import { TabNav, ThemeToggle, ErrorBoundary } from '@/components/common';
 import type { TabId } from '@/components/common';
 import { UuidGenerator } from '@/components/generator';
-import { UuidValidator } from '@/components/validator';
-import { UuidParser } from '@/components/parser';
+
+// 코드 스플리팅: Validator와 Parser는 탭 전환 시 동적 로딩
+const UuidValidator = dynamic(
+  () => import('@/components/validator').then((mod) => mod.UuidValidator),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center h-32 text-text-muted font-mono text-sm">
+        <span className="animate-pulse">Loading...</span>
+      </div>
+    ),
+  }
+);
+
+const UuidParser = dynamic(
+  () => import('@/components/parser').then((mod) => mod.UuidParser),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center h-32 text-text-muted font-mono text-sm">
+        <span className="animate-pulse">Loading...</span>
+      </div>
+    ),
+  }
+);
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>('generator');
