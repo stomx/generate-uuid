@@ -74,7 +74,6 @@ generateUuids('v7', 10);         // 다중 생성
 
 ### 공통 규칙
 - **유의미한 작업 완료 시 반드시 커밋** - 기능 추가, 버그 수정, 리팩토링 등 완료 후 즉시 커밋
-- **Co-Author 정보 제외** - 커밋 메시지에 Co-Authored-By 포함하지 않음
 
 ### TDD (Test-Driven Development)
 이 프로젝트는 TDD 방식으로 개발합니다.
