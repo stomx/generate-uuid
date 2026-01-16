@@ -65,11 +65,11 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-dvh sm:h-dvh bg-bg-deep flex flex-col sm:overflow-hidden">
-      {/* 모바일: min-h + 스크롤, 데스크톱: 고정 높이 레이아웃 */}
+    <main className="h-dvh bg-bg-deep flex flex-col overflow-hidden">
+      {/* 뷰포트 고정 높이 레이아웃 */}
 
-      <div className="relative z-10 flex flex-col sm:h-full p-4 sm:p-6">
-        <div className="max-w-2xl mx-auto w-full flex flex-col sm:h-full">
+      <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
+        <div className="max-w-2xl mx-auto w-full flex flex-col h-full">
           {/* 헤더 - 고정 높이 */}
           <header className={`
             flex items-center justify-between pb-4 shrink-0
@@ -100,9 +100,9 @@ export default function Home() {
             </div>
           </header>
 
-          {/* 메인 컨테이너 - 모바일: auto, 데스크톱: flex-1 */}
+          {/* 메인 컨테이너 - 뷰포트에 맞춰 확장 */}
           <div className={`
-            sm:flex-1 flex flex-col sm:min-h-0
+            flex-1 flex flex-col min-h-0
             ${mounted ? 'animate-fade-in' : 'opacity-0'}
           `} style={{ animationDelay: '100ms' }}>
             {/* 터미널 스타일 헤더 */}
@@ -117,20 +117,20 @@ export default function Home() {
               </span>
             </div>
 
-            {/* 메인 카드 - 모바일: auto, 데스크톱: flex-1로 확장 */}
-            <Card className="p-3 sm:p-6 border-t-0 sm:flex-1 flex flex-col sm:min-h-0">
+            {/* 메인 카드 - flex-1로 확장 */}
+            <Card className="p-3 sm:p-6 border-t-0 flex-1 flex flex-col min-h-0">
               {/* 탭 네비게이션 */}
               <nav className="mb-3 sm:mb-4 shrink-0">
                 <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
               </nav>
 
-              {/* 탭 패널 - 모바일: auto, 데스크톱: 내부 스크롤 */}
+              {/* 탭 패널 - 내부 스크롤 */}
               <ErrorBoundary>
                 <div
                   role="tabpanel"
                   id={`panel-${activeTab}`}
                   aria-labelledby={`tab-${activeTab}`}
-                  className="sm:flex-1 sm:overflow-y-auto sm:min-h-0 p-1 -m-1"
+                  className="flex-1 overflow-y-auto min-h-0 p-1 -m-1"
                 >
                   {activeTab === 'generator' && <UuidGenerator />}
                   {activeTab === 'validator' && <UuidValidator />}

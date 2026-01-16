@@ -101,7 +101,7 @@ export function UuidGenerator() {
   const isSingle = uuids.length === 1;
 
   return (
-    <div className="flex flex-col sm:h-full sm:min-h-0 gap-3 sm:gap-4">
+    <div className="flex flex-col h-full min-h-0 gap-3 sm:gap-4">
       {/* Version Selector */}
       <div className="shrink-0">
         <VersionSelector selected={version} onChange={setVersion} />
