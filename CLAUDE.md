@@ -21,7 +21,7 @@ npm run deploy       # Build + gh-pages deploy (GitHub Actions 비활성화 상�
 
 # Test
 npm run test         # Vitest watch mode
-npm run test:run     # Single run (62 tests)
+npm run test:run     # Single run (91 tests)
 npm run test:e2e     # Playwright E2E tests
 npm run test:e2e:ui  # Playwright UI mode
 
@@ -121,6 +121,43 @@ screen.getByTestId('validation-result')  // 특정 영역 선택
    - 유닛 테스트: `lib/**/__tests__/*.test.ts`
    - 컴포넌트 테스트: `components/**/__tests__/*.test.tsx`
    - E2E 테스트: `e2e/*.spec.ts`
+
+### 테스트 모킹 패턴
+
+**localStorage 모킹** (히스토리 기능 테스트):
+```typescript
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
+    removeItem: vi.fn((key: string) => { delete store[key]; }),
+    clear: vi.fn(() => { store = {}; }),
+  };
+})();
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+// beforeEach에서 초기화
+beforeEach(() => {
+  localStorageMock.clear();
+  vi.clearAllMocks();
+});
+```
+
+**crypto.randomUUID 모킹** (ID 생성 테스트):
+```typescript
+vi.stubGlobal('crypto', {
+  ...crypto,
+  randomUUID: vi.fn(() => 'mock-uuid-id'),
+});
+```
+
+**Radix UI 테스트** (Select 등):
+```typescript
+beforeAll(() => {
+  Element.prototype.scrollIntoView = vi.fn();
+});
+```
 
 ## Deployment
 
