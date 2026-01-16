@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://uuid.stomx.net/og-image.png',
+        url: 'https://uuid.stomx.net/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'UUID Generator - Free Online Tool',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'UUID Generator - Free Online Tool',
     description: 'Generate, validate, and parse UUID v1, v4, v7',
-    images: ['https://uuid.stomx.net/og-image.png'],
+    images: ['https://uuid.stomx.net/og-image.jpg'],
   },
   robots: {
     index: true,
