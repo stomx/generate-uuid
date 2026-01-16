@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import Script from 'next/script';
 import './globals.css';
 
 const geistSans = localFont({
@@ -24,6 +25,9 @@ export const metadata: Metadata = {
     description: 'UUID v1, v4, v7 생성기 및 검증기',
     type: 'website',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-4723857054709306',
+  },
 };
 
 export default function RootLayout({
@@ -31,8 +35,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        {/* Google AdSense */}
+        {adsenseClientId && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -118,6 +118,7 @@ export default function Home() {
             </Card>
           </div>
 
+
           {/* 푸터 - 고정 높이 */}
           <footer className={`
             pt-4 text-center shrink-0

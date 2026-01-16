@@ -57,3 +57,4 @@ next-env.d.ts
 .playwright-mcp/terminal-noir-design.png
 .playwright-mcp/updated-ui.png
 .playwright-mcp/validator-test.png
+.env
