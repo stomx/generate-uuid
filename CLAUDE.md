@@ -70,6 +70,18 @@ generateUuids('v7', 10);         // 다중 생성
 ### 컴포넌트 Export
 각 폴더의 `index.ts`에서 barrel export. 새 컴포넌트 추가 시 index에 등록 필요.
 
+## Development Guidelines
+
+### TDD (Test-Driven Development)
+이 프로젝트는 TDD 방식으로 개발합니다.
+
+1. **테스트 먼저 작성** - 기능 구현 전 테스트 케이스 작성
+2. **Red → Green → Refactor** 사이클 준수
+3. **테스트 위치**:
+   - 유닛 테스트: `lib/**/__tests__/*.test.ts`
+   - 컴포넌트 테스트: `components/**/__tests__/*.test.tsx`
+   - E2E 테스트: `e2e/*.spec.ts`
+
 ## Deployment
 
 GitHub Pages (Custom Domain: uuid.stomx.net)
