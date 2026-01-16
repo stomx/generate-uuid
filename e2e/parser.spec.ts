@@ -63,3 +63,106 @@ test.describe('UUID Parser', () => {
     await expect(page.locator('text=SUCCESS')).toBeVisible();
   });
 });
+
+test.describe('UUID Parser 히스토리', () => {
+  test.beforeEach(async ({ page }) => {
+    // localStorage 초기화
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await page.click('[data-testid="tab-parser"]');
+  });
+
+  test('파싱 후 히스토리에 추가되어야 함', async ({ page }) => {
+    const input = page.locator('input[placeholder="파싱할 UUID를 입력하세요..."]');
+    const panel = page.locator('#panel-parser');
+
+    // 초기 상태 - 빈 히스토리
+    await expect(panel.getByText('[0]')).toBeVisible();
+
+    // UUID 파싱
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+
+    // 히스토리 카운트 증가
+    await expect(panel.getByText('[1]')).toBeVisible();
+  });
+
+  test('히스토리 Clear All 버튼이 동작해야 함', async ({ page }) => {
+    const input = page.locator('input[placeholder="파싱할 UUID를 입력하세요..."]');
+    const panel = page.locator('#panel-parser');
+
+    // UUID 파싱하여 히스토리 추가
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // Clear All 클릭
+    await panel.getByRole('button', { name: /clear/i }).click();
+
+    // 히스토리 초기화됨
+    await expect(panel.getByText('[0]')).toBeVisible();
+    await expect(panel.getByText('No parse history yet')).toBeVisible();
+  });
+
+  test('히스토리 개별 삭제가 동작해야 함', async ({ page }) => {
+    const input = page.locator('input[placeholder="파싱할 UUID를 입력하세요..."]');
+    const panel = page.locator('#panel-parser');
+
+    // UUID 파싱
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // [RM] 버튼 클릭
+    await panel.getByLabel('히스토리에서 삭제').click();
+
+    // 히스토리 비워짐
+    await expect(panel.getByText('[0]')).toBeVisible();
+  });
+
+  test('히스토리가 페이지 리로드 후에도 유지되어야 함', async ({ page }) => {
+    const input = page.locator('input[placeholder="파싱할 UUID를 입력하세요..."]');
+    const panel = page.locator('#panel-parser');
+
+    // UUID 파싱
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // 페이지 리로드
+    await page.reload();
+    await page.click('[data-testid="tab-parser"]');
+
+    // 히스토리 유지됨
+    await expect(page.locator('#panel-parser').getByText('[1]')).toBeVisible();
+  });
+
+  test('성공/에러 결과 모두 히스토리에 추가되어야 함', async ({ page }) => {
+    const input = page.locator('input[placeholder="파싱할 UUID를 입력하세요..."]');
+    const panel = page.locator('#panel-parser');
+
+    // 유효한 UUID
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // 무효한 UUID
+    await input.clear();
+    await input.fill('invalid-uuid');
+    await input.press('Enter');
+    await expect(panel.getByText('[2]')).toBeVisible();
+  });
+
+  test('히스토리에 [PARSED] 상태가 표시되어야 함', async ({ page }) => {
+    const input = page.locator('input[placeholder="파싱할 UUID를 입력하세요..."]');
+    const panel = page.locator('#panel-parser');
+
+    // 유효한 UUID 파싱
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+
+    // 히스토리에 [PARSED] 표시 확인
+    await expect(panel.getByText('[PARSED]')).toBeVisible();
+  });
+});

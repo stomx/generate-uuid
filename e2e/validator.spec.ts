@@ -65,3 +65,94 @@ test.describe('UUID Validator', () => {
     await expect(page.getByText('v1', { exact: true })).toBeVisible();
   });
 });
+
+test.describe('UUID Validator 히스토리', () => {
+  test.beforeEach(async ({ page }) => {
+    // localStorage 초기화
+    await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await page.click('[data-testid="tab-validator"]');
+  });
+
+  test('검증 후 히스토리에 추가되어야 함', async ({ page }) => {
+    const input = page.locator('[data-testid="uuid-input"]');
+    const panel = page.locator('#panel-validator');
+
+    // 초기 상태 - 빈 히스토리
+    await expect(panel.getByText('[0]')).toBeVisible();
+
+    // UUID 검증
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+
+    // 히스토리 카운트 증가
+    await expect(panel.getByText('[1]')).toBeVisible();
+  });
+
+  test('히스토리 Clear All 버튼이 동작해야 함', async ({ page }) => {
+    const input = page.locator('[data-testid="uuid-input"]');
+    const panel = page.locator('#panel-validator');
+
+    // UUID 검증하여 히스토리 추가
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // Clear All 클릭
+    await panel.getByRole('button', { name: /clear/i }).click();
+
+    // 히스토리 초기화됨
+    await expect(panel.getByText('[0]')).toBeVisible();
+    await expect(panel.getByText('No validation history yet')).toBeVisible();
+  });
+
+  test('히스토리 개별 삭제가 동작해야 함', async ({ page }) => {
+    const input = page.locator('[data-testid="uuid-input"]');
+    const panel = page.locator('#panel-validator');
+
+    // UUID 검증
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // [RM] 버튼 클릭
+    await panel.getByLabel('히스토리에서 삭제').click();
+
+    // 히스토리 비워짐
+    await expect(panel.getByText('[0]')).toBeVisible();
+  });
+
+  test('히스토리가 페이지 리로드 후에도 유지되어야 함', async ({ page }) => {
+    const input = page.locator('[data-testid="uuid-input"]');
+    const panel = page.locator('#panel-validator');
+
+    // UUID 검증
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // 페이지 리로드
+    await page.reload();
+    await page.click('[data-testid="tab-validator"]');
+
+    // 히스토리 유지됨
+    await expect(page.locator('#panel-validator').getByText('[1]')).toBeVisible();
+  });
+
+  test('유효/무효 UUID 모두 히스토리에 추가되어야 함', async ({ page }) => {
+    const input = page.locator('[data-testid="uuid-input"]');
+    const panel = page.locator('#panel-validator');
+
+    // 유효한 UUID
+    await input.fill('550e8400-e29b-41d4-a716-446655440000');
+    await input.press('Enter');
+    await expect(panel.getByText('[1]')).toBeVisible();
+
+    // 무효한 UUID
+    await input.clear();
+    await input.fill('invalid-uuid');
+    await input.press('Enter');
+    await expect(panel.getByText('[2]')).toBeVisible();
+  });
+});
