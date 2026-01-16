@@ -150,22 +150,29 @@ test('should validate UUID', async ({ page }) => {
 
 ### 테스트 현황 (2026-01-17)
 
-**Unit 138개 + E2E 26개 = 총 164개**
+**Unit 241개 + E2E 26개 = 총 267개**
 
 | 영역 | 파일 | 테스트 수 |
 |------|------|-----------|
-| **UUID 라이브러리** | `lib/uuid/__tests__/` | 34 |
+| **UUID 라이브러리** | `lib/uuid/__tests__/` | 53 |
 | └ v1.test.ts | 타임스탬프 기반 생성 | 8 |
 | └ v4.test.ts | 랜덤 생성 | 6 |
-| └ v7.test.ts | Unix ms 타임스탬프 | 4 |
+| └ v7.test.ts | Unix ms 타임스탬프 | 7 |
 | └ validator.test.ts | 형식/버전 검증 | 16 |
+| └ parser.test.ts | UUID 파싱 | 19 |
 | **Hooks** | `hooks/__tests__/` | 25 |
 | └ useLocalStorage.test.ts | localStorage 상태 관리 | 7 |
 | └ useTheme.test.ts | 테마 전환 로직 | 8 |
 | └ useUuidGenerator.test.ts | UUID 생성 훅 | 10 |
-| **UI 컴포넌트** | `components/ui/__tests__/` | 16 |
-| └ Checkbox.test.tsx | Radix UI 체크박스 | 8 |
-| └ Select.test.tsx | Radix UI 셀렉트 | 8 |
+| **UI 컴포넌트** | `components/ui/__tests__/` | 100 |
+| └ Button.test.tsx | 버튼 variant/size/events | 17 |
+| └ Card.test.tsx | 카드 variant/glow | 9 |
+| └ Input.test.tsx | 입력 label/error/prefix | 23 |
+| └ GlassButton.test.tsx | Glass 버튼 | 12 |
+| └ GlassCard.test.tsx | Glass 카드 | 8 |
+| └ GlassInput.test.tsx | Glass 입력 | 15 |
+| └ Checkbox.test.tsx | Radix UI 체크박스 | 7 |
+| └ Select.test.tsx | Radix UI 셀렉트 | 9 |
 | **Common** | `components/common/__tests__/` | 22 |
 | └ TabNav.test.tsx | 탭 네비게이션 | 8 |
 | └ ThemeToggle.test.tsx | 테마 토글 버튼 | 8 |

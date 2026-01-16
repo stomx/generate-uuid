@@ -21,7 +21,7 @@ npm run deploy       # Build + gh-pages deploy (GitHub Actions 비활성화 상�
 
 # Test
 npm run test         # Vitest watch mode
-npm run test:run     # Single run (157 tests)
+npm run test:run     # Single run (241 tests)
 npm run test:e2e     # Playwright E2E tests
 npm run test:e2e:ui  # Playwright UI mode
 
