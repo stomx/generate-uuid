@@ -31,15 +31,16 @@ test.describe('UUID Generator', () => {
     expect(newUuid).not.toBe(firstUuid);
   });
 
-  test('COPY 버튼 클릭 시 클립보드에 복사', async ({ page, context }) => {
+  test('복사 버튼 클릭 시 클립보드에 복사', async ({ page, context }) => {
     // 클립보드 권한 부여
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
-    const copyBtn = page.locator('[data-testid="copy-btn"]');
+    // 아이콘 복사 버튼 (aria-label로 식별)
+    const copyBtn = page.locator('button[aria-label="전체 복사"]');
     await copyBtn.click();
 
-    // 버튼 텍스트가 COPIED로 변경되는지 확인
-    await expect(copyBtn).toContainText('COPIED');
+    // 복사 성공 시 버튼 배경색이 accent-mint로 변경됨 (bg-accent-mint 클래스)
+    await expect(copyBtn).toHaveClass(/bg-accent-mint/);
   });
 
   test('버전 탭 전환이 작동해야 함', async ({ page }) => {

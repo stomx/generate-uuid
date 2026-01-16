@@ -50,8 +50,8 @@ describe('UuidParser', () => {
 
     await waitFor(() => {
       expect(screen.getByText('SUCCESS')).toBeInTheDocument();
-      // 파서 결과에 타임스탬프 관련 필드가 있는지 확인 (한국어: '타임스탬프' 또는 '생성 시간')
-      expect(screen.getByText('타임스탬프')).toBeInTheDocument();
+      // 파서 결과에 타임스탬프 관련 필드가 있는지 확인 (히스토리에도 있을 수 있으므로 getAllBy 사용)
+      expect(screen.getAllByText('타임스탬프').length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -65,7 +65,8 @@ describe('UuidParser', () => {
     fireEvent.click(parseBtn);
 
     await waitFor(() => {
-      expect(screen.getByText('[ERROR]')).toBeInTheDocument();
+      // 히스토리에도 [ERROR]가 있을 수 있으므로 getAllBy 사용
+      expect(screen.getAllByText('[ERROR]').length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -82,8 +83,9 @@ describe('UuidParser', () => {
     fireEvent.click(parseBtn);
 
     await waitFor(() => {
-      expect(screen.getByText('[ERROR]')).toBeInTheDocument();
-      expect(screen.getByText(/지원하지 않습니다/)).toBeInTheDocument();
+      expect(screen.getAllByText('[ERROR]').length).toBeGreaterThanOrEqual(1);
+      // 히스토리에도 에러 메시지가 있을 수 있으므로 getAllBy 사용
+      expect(screen.getAllByText(/지원하지 않습니다/).length).toBeGreaterThanOrEqual(1);
     });
   });
 

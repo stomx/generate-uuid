@@ -6,13 +6,14 @@ export type TabId = 'generator' | 'validator' | 'parser';
 interface Tab {
   id: TabId;
   label: string;
+  shortLabel: string;
   shortcut: string;
 }
 
 const TABS: Tab[] = [
-  { id: 'generator', label: 'Generate', shortcut: '1' },
-  { id: 'validator', label: 'Validate', shortcut: '2' },
-  { id: 'parser', label: 'Parse', shortcut: '3' },
+  { id: 'generator', label: 'Generate', shortLabel: 'GEN', shortcut: '1' },
+  { id: 'validator', label: 'Validate', shortLabel: 'VAL', shortcut: '2' },
+  { id: 'parser', label: 'Parse', shortLabel: 'PARSE', shortcut: '3' },
 ];
 
 interface TabNavProps {
@@ -32,8 +33,9 @@ export function TabNav({ activeTab, onTabChange }: TabNavProps) {
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}
           className={`
-            relative px-6 py-3
-            font-mono text-sm uppercase tracking-wider
+            relative flex-1 sm:flex-none
+            px-3 sm:px-6 py-2.5 sm:py-3
+            font-mono text-xs sm:text-sm uppercase tracking-wider
             transition-all duration-150
             border-b-2 -mb-[2px]
             focus:outline-none
@@ -44,8 +46,10 @@ export function TabNav({ activeTab, onTabChange }: TabNavProps) {
             }
           `}
         >
-          <span className="text-text-muted text-xs mr-2">[{tab.shortcut}]</span>
-          {tab.label}
+          {/* 모바일: 단축키만, 데스크톱: 단축키 + 풀 라벨 */}
+          <span className="hidden sm:inline text-text-muted text-xs mr-2">[{tab.shortcut}]</span>
+          <span className="sm:hidden">{tab.shortLabel}</span>
+          <span className="hidden sm:inline">{tab.label}</span>
         </button>
       ))}
     </div>

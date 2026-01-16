@@ -35,8 +35,8 @@ export function Button({
       focus-visible:shadow-[0_0_0_2px_var(--bg-deep),0_0_0_4px_var(--text-primary)]
     `,
     secondary: `
-      bg-transparent text-text-primary border-border-subtle
-      hover:bg-bg-hover hover:border-text-muted
+      bg-bg-surface text-text-primary border-border-dashed
+      hover:bg-bg-hover hover:border-text-muted hover:text-accent-mint
       active:bg-bg-elevated
       ${active ? 'bg-bg-elevated border-accent-mint text-accent-mint' : ''}
     `,

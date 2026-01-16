@@ -44,7 +44,8 @@ describe('UuidGenerator', () => {
 
   it('복사 버튼이 있어야 함', () => {
     render(<UuidGenerator />);
-    expect(screen.getByTestId('copy-btn')).toBeInTheDocument();
+    // 아이콘 복사 버튼 (aria-label로 식별)
+    expect(screen.getByLabelText('전체 복사')).toBeInTheDocument();
   });
 
   it('생성 버튼이 있어야 함', () => {
@@ -80,7 +81,8 @@ describe('UuidGenerator', () => {
       expect(screen.getByTestId('uuid-display').textContent).toBeTruthy();
     });
 
-    const copyBtn = screen.getByTestId('copy-btn');
+    // 아이콘 복사 버튼 (aria-label로 식별)
+    const copyBtn = screen.getByLabelText('전체 복사');
     fireEvent.click(copyBtn);
 
     await waitFor(() => {

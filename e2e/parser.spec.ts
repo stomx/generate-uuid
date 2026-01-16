@@ -30,7 +30,8 @@ test.describe('UUID Parser', () => {
     await page.click('button:has-text("[ PARSE ]")');
 
     await expect(page.locator('text=SUCCESS')).toBeVisible();
-    await expect(page.locator('text=TIMESTAMP')).toBeVisible();
+    // 타임스탬프 키 확인 (첫 번째 일치하는 요소)
+    await expect(page.getByText('타임스탬프', { exact: true }).first()).toBeVisible();
   });
 
   test('유효하지 않은 UUID 입력 시 에러 표시', async ({ page }) => {
@@ -39,7 +40,8 @@ test.describe('UUID Parser', () => {
 
     await page.click('button:has-text("[ PARSE ]")');
 
-    await expect(page.locator('text=[ERROR]')).toBeVisible();
+    // 결과 영역의 [ERROR] 확인 (히스토리에도 [ERROR]가 있을 수 있음)
+    await expect(page.getByText('[ERROR]').first()).toBeVisible();
   });
 
   test('지원하지 않는 버전 입력 시 에러 표시', async ({ page }) => {
@@ -49,7 +51,8 @@ test.describe('UUID Parser', () => {
 
     await page.click('button:has-text("[ PARSE ]")');
 
-    await expect(page.locator('text=[ERROR]')).toBeVisible();
+    // 결과 영역의 [ERROR] 확인
+    await expect(page.getByText('[ERROR]').first()).toBeVisible();
   });
 
   test('Enter 키로 파싱 실행', async ({ page }) => {

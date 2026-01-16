@@ -17,6 +17,24 @@ export interface UuidHistoryItem {
   createdAt: string; // ISO 8601 문자열 (localStorage 직렬화용)
 }
 
+// Validator 히스토리 아이템
+export interface ValidationHistoryItem {
+  id: string;
+  input: string;
+  result: ValidationResult;
+  createdAt: string;
+}
+
+// Parser 히스토리 아이템
+export interface ParseHistoryItem {
+  id: string;
+  input: string;
+  result: ParsedUuid | null;
+  formatted: Record<string, string> | null;
+  error: string | null;
+  createdAt: string;
+}
+
 // 검증 에러 코드
 export enum ValidationErrorCode {
   INVALID_LENGTH = 'INVALID_LENGTH',

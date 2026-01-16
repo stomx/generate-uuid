@@ -65,11 +65,11 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="h-dvh bg-bg-deep flex flex-col overflow-hidden">
-      {/* 100dvh 레이아웃: 헤더/푸터 고정, 메인 영역 flex-1 */}
+    <main className="min-h-dvh sm:h-dvh bg-bg-deep flex flex-col sm:overflow-hidden">
+      {/* 모바일: min-h + 스크롤, 데스크톱: 고정 높이 레이아웃 */}
 
-      <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
-        <div className="max-w-2xl mx-auto w-full flex flex-col h-full">
+      <div className="relative z-10 flex flex-col sm:h-full p-4 sm:p-6">
+        <div className="max-w-2xl mx-auto w-full flex flex-col sm:h-full">
           {/* 헤더 - 고정 높이 */}
           <header className={`
             flex items-center justify-between pb-4 shrink-0
@@ -100,37 +100,37 @@ export default function Home() {
             </div>
           </header>
 
-          {/* 메인 컨테이너 - flex-1로 남은 공간 채움 */}
+          {/* 메인 컨테이너 - 모바일: auto, 데스크톱: flex-1 */}
           <div className={`
-            flex-1 flex flex-col min-h-0
+            sm:flex-1 flex flex-col sm:min-h-0
             ${mounted ? 'animate-fade-in' : 'opacity-0'}
           `} style={{ animationDelay: '100ms' }}>
             {/* 터미널 스타일 헤더 */}
-            <div className="flex items-center justify-between px-4 py-2 bg-bg-elevated border border-border-subtle border-b-0 shrink-0">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-accent-red/80" />
-                <span className="w-3 h-3 rounded-full bg-accent-amber/80" />
-                <span className="w-3 h-3 rounded-full bg-accent-mint/80" />
+            <div className="flex items-center justify-between px-3 sm:px-4 py-1.5 sm:py-2 bg-bg-elevated border border-border-subtle border-b-0 shrink-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-accent-red/80" />
+                <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-accent-amber/80" />
+                <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-accent-mint/80" />
               </div>
-              <span className="text-text-muted font-mono text-xs">
+              <span className="text-text-muted font-mono text-[10px] sm:text-xs">
                 ~/uuid-generator
               </span>
             </div>
 
-            {/* 메인 카드 - flex-1로 확장, 내부 스크롤 */}
-            <Card className="p-4 sm:p-6 border-t-0 flex-1 flex flex-col min-h-0">
+            {/* 메인 카드 - 모바일: auto, 데스크톱: flex-1로 확장 */}
+            <Card className="p-3 sm:p-6 border-t-0 sm:flex-1 flex flex-col sm:min-h-0">
               {/* 탭 네비게이션 */}
-              <nav className="mb-4 shrink-0">
+              <nav className="mb-3 sm:mb-4 shrink-0">
                 <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
               </nav>
 
-              {/* 탭 패널 - 내부 스크롤 */}
+              {/* 탭 패널 - 모바일: auto, 데스크톱: 내부 스크롤 */}
               <ErrorBoundary>
                 <div
                   role="tabpanel"
                   id={`panel-${activeTab}`}
                   aria-labelledby={`tab-${activeTab}`}
-                  className="flex-1 overflow-y-auto min-h-0 p-1 -m-1"
+                  className="sm:flex-1 sm:overflow-y-auto sm:min-h-0 p-1 -m-1"
                 >
                   {activeTab === 'generator' && <UuidGenerator />}
                   {activeTab === 'validator' && <UuidValidator />}
@@ -143,18 +143,18 @@ export default function Home() {
 
           {/* 푸터 - 고정 높이 */}
           <footer className={`
-            pt-4 text-center shrink-0
+            pt-3 sm:pt-4 text-center shrink-0
             ${mounted ? 'animate-fade-in' : 'opacity-0'}
           `} style={{ animationDelay: '200ms' }}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-text-muted font-mono text-xs">
-              <span className="flex items-center gap-2">
+            <div className="flex items-center justify-center gap-2 sm:gap-4 text-text-muted font-mono text-[10px] sm:text-xs">
+              <span className="flex items-center gap-1.5 sm:gap-2">
                 <span className="text-accent-cyan">v1</span>
                 <span className="text-text-muted/50">/</span>
                 <span className="text-accent-amber">v4</span>
                 <span className="text-text-muted/50">/</span>
                 <span className="text-accent-mint">v7</span>
               </span>
-              <span className="hidden sm:inline text-text-muted/30">|</span>
+              <span className="text-text-muted/30">|</span>
               <a
                 href="https://www.rfc-editor.org/rfc/rfc9562.html"
                 target="_blank"
@@ -165,8 +165,8 @@ export default function Home() {
               </a>
             </div>
 
-            {/* 키보드 단축키 힌트 */}
-            <div className="mt-2 flex items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
+            {/* 키보드 단축키 힌트 - 데스크톱만 */}
+            <div className="hidden sm:flex mt-2 items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
               <span>
                 <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">1</kbd>
                 <span className="ml-1">GEN</span>

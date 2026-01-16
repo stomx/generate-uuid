@@ -43,12 +43,35 @@ npm run lint         # ESLint
 ### Component Structure
 ```
 components/
-├── ui/          # 기본 UI (Card, Button, Input)
+├── ui/          # 기본 UI + shadcn/ui 컴포넌트
+│   ├── Card, Button, Input (커스텀)
+│   ├── Checkbox, Select (Radix UI 기반)
+│   └── index.ts (barrel exports)
 ├── common/      # 공통 (TabNav, ThemeToggle, ErrorBoundary)
-├── generator/   # UUID 생성 기능
-├── validator/   # UUID 검증 기능
-└── parser/      # UUID 파싱 기능
+├── generator/   # UUID 생성 (VersionSelector, OptionsPanel)
+├── validator/   # UUID 검증 + 히스토리
+└── parser/      # UUID 파싱 + 히스토리
 ```
+
+### UI Components (shadcn/ui)
+이 프로젝트는 **shadcn/ui** 컴포넌트 라이브러리를 사용합니다.
+
+**설정 파일**: `components.json`
+- Radix UI 프리미티브 기반 접근성 컴포넌트
+- CSS Variables로 Terminal Noir 디자인 시스템 연동
+
+**유틸리티**: `lib/utils.ts`
+```typescript
+import { cn } from '@/lib/utils';
+// cn() = clsx + tailwind-merge
+cn('base-class', condition && 'conditional', className)
+```
+
+**주요 의존성**:
+- `@radix-ui/react-checkbox` - 체크박스 프리미티브
+- `@radix-ui/react-select` - 셀렉트 드롭다운
+- `clsx` + `tailwind-merge` - className 조합
+- `tailwindcss-animate` - 애니메이션 유틸리티
 
 ### Styling
 - **CSS Variables**: `globals.css`의 `:root`에 정의된 시맨틱 컬러 토큰
@@ -67,8 +90,22 @@ generateUuid('v4');              // 단일 생성
 generateUuids('v7', 10);         // 다중 생성
 ```
 
+### 히스토리 기능
+Validator와 Parser 컴포넌트에 localStorage 기반 히스토리 기능이 내장되어 있습니다.
+- 최대 20개 항목 저장 (`MAX_HISTORY`)
+- 복사, 삭제, 전체 삭제 지원
+- `useLocalStorage` 훅으로 상태 관리
+
 ### 컴포넌트 Export
 각 폴더의 `index.ts`에서 barrel export. 새 컴포넌트 추가 시 index에 등록 필요.
+
+### 테스트 작성 시 주의사항
+히스토리 기능으로 인해 동일 텍스트가 여러 곳에 표시될 수 있습니다:
+```typescript
+// 단일 요소 → 다중 요소 처리
+screen.getAllByText('[ERROR]').length  // getByText 대신
+screen.getByTestId('validation-result')  // 특정 영역 선택
+```
 
 ## Development Guidelines
 

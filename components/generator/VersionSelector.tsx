@@ -22,7 +22,7 @@ interface VersionSelectorProps {
 
 export function VersionSelector({ selected, onChange }: VersionSelectorProps) {
   return (
-    <div role="radiogroup" aria-label="UUID 버전 선택" className="flex gap-2 p-1.5 -m-1.5">
+    <div role="radiogroup" aria-label="UUID 버전 선택" className="flex gap-1.5 sm:gap-2 p-1 sm:p-1.5 -m-1 sm:-m-1.5">
       {VERSIONS.map((version) => {
         const isSelected = selected === version.id;
         return (
@@ -33,7 +33,7 @@ export function VersionSelector({ selected, onChange }: VersionSelectorProps) {
             data-testid={`version-${version.id}`}
             onClick={() => onChange(version.id)}
             className={`
-              flex-1 relative px-4 py-4
+              flex-1 relative px-2 sm:px-4 py-2 sm:py-4
               border transition-all duration-150
               group focus:outline-none
               focus-visible:z-10 focus-visible:shadow-[0_0_0_2px_var(--accent-mint)]
@@ -43,9 +43,9 @@ export function VersionSelector({ selected, onChange }: VersionSelectorProps) {
               }
             `}
           >
-            {/* Shortcut hint */}
+            {/* Shortcut hint - 데스크톱만 */}
             <div className={`
-              absolute top-2 left-2
+              hidden sm:block absolute top-2 left-2
               px-1 py-0.5
               font-mono text-[10px]
               border
@@ -58,21 +58,22 @@ export function VersionSelector({ selected, onChange }: VersionSelectorProps) {
             </div>
 
             {/* Version label */}
-            <div className="font-mono text-2xl font-bold tracking-tighter mt-2">
+            <div className="font-mono text-lg sm:text-2xl font-bold tracking-tighter sm:mt-2">
               {version.label}
             </div>
 
-            {/* Description */}
+            {/* Description - 모바일에서 축약 */}
             <div className={`
-              font-mono text-xs uppercase tracking-wider mt-1
+              font-mono text-[9px] sm:text-xs uppercase tracking-wider mt-0 sm:mt-1
               ${isSelected ? 'text-accent-mint/70' : 'text-text-muted'}
             `}>
-              {version.description}
+              <span className="sm:hidden">{version.badge}</span>
+              <span className="hidden sm:inline">{version.description}</span>
             </div>
 
-            {/* Badge */}
+            {/* Badge - 데스크톱만 */}
             <div className={`
-              absolute top-2 right-2
+              hidden sm:block absolute top-2 right-2
               px-1.5 py-0.5
               font-mono text-[10px] uppercase
               border
@@ -86,7 +87,7 @@ export function VersionSelector({ selected, onChange }: VersionSelectorProps) {
 
             {/* Selection indicator */}
             {isSelected && (
-              <div className="absolute -left-px top-1/2 -translate-y-1/2 w-1 h-8 bg-accent-mint" />
+              <div className="absolute -left-px top-1/2 -translate-y-1/2 w-0.5 sm:w-1 h-5 sm:h-8 bg-accent-mint" />
             )}
           </button>
         );
