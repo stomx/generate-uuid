@@ -38,7 +38,7 @@ describe('useLocalStorage', () => {
   it('localStorage에 저장된 값을 로드해야 함', () => {
     localStorageMock.setItem('test-key', JSON.stringify('stored-value'));
 
-    const { result } = renderHook(() => useLocalStorage('test-key', 'initial'));
+    renderHook(() => useLocalStorage('test-key', 'initial'));
 
     // 초기값 이후 useEffect에서 로드
     expect(localStorageMock.getItem).toHaveBeenCalledWith('test-key');

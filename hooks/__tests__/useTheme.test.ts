@@ -24,16 +24,13 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 // matchMedia 모킹
-let mediaQueryCallback: ((e: { matches: boolean }) => void) | null = null;
 const matchMediaMock = vi.fn().mockImplementation((query: string) => ({
   matches: false, // 기본: 라이트 모드
   media: query,
   onchange: null,
   addListener: vi.fn(),
   removeListener: vi.fn(),
-  addEventListener: vi.fn((_event: string, callback: (e: { matches: boolean }) => void) => {
-    mediaQueryCallback = callback;
-  }),
+  addEventListener: vi.fn(),
   removeEventListener: vi.fn(),
   dispatchEvent: vi.fn(),
 }));
@@ -48,7 +45,6 @@ describe('useTheme', () => {
     localStorageMock.clear();
     vi.clearAllMocks();
     document.documentElement.classList.remove('dark');
-    mediaQueryCallback = null;
   });
 
   afterEach(() => {
@@ -64,7 +60,7 @@ describe('useTheme', () => {
   it('localStorage에 저장된 테마를 로드해야 함', () => {
     localStorageMock.setItem('theme', 'dark');
 
-    const { result } = renderHook(() => useTheme());
+    renderHook(() => useTheme());
 
     // useEffect 후 테마 로드됨
     expect(localStorageMock.getItem).toHaveBeenCalledWith('theme');
