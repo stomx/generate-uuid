@@ -9,26 +9,27 @@ interface Tab {
   label: string;
   shortLabel: string;
   shortcut: string;
-  href: string;
+  path: string;
 }
 
 const TABS: Tab[] = [
-  { id: 'generator', label: 'Generate', shortLabel: 'GEN', shortcut: '1', href: '/generate/v7' },
-  { id: 'validator', label: 'Validate', shortLabel: 'VAL', shortcut: '2', href: '/validate' },
-  { id: 'parser', label: 'Parse', shortLabel: 'PARSE', shortcut: '3', href: '/parse' },
+  { id: 'generator', label: 'Generate', shortLabel: 'GEN', shortcut: '1', path: '/generate/v7' },
+  { id: 'validator', label: 'Validate', shortLabel: 'VAL', shortcut: '2', path: '/validate' },
+  { id: 'parser', label: 'Parse', shortLabel: 'PARSE', shortcut: '3', path: '/parse' },
 ];
 
 interface TabNavProps {
   activeTab: TabId;
+  lang?: string;
 }
 
-export function TabNav({ activeTab }: TabNavProps) {
+export function TabNav({ activeTab, lang = 'en' }: TabNavProps) {
   return (
     <div role="tablist" aria-label="UUID 도구 선택" className="flex border-b border-border-subtle -mx-1 px-1">
       {TABS.map((tab) => (
         <Link
           key={tab.id}
-          href={tab.href}
+          href={`/${lang}${tab.path}`}
           role="tab"
           data-testid={`tab-${tab.id}`}
           aria-selected={activeTab === tab.id}

@@ -8,12 +8,12 @@ import { TabNav, ThemeToggle, ErrorBoundary } from '@/components/common';
 import type { TabId } from '@/components/common';
 
 function getActiveTab(pathname: string): TabId {
-  if (pathname.startsWith('/validate')) return 'validator';
-  if (pathname.startsWith('/parse')) return 'parser';
+  if (pathname.includes('/validate')) return 'validator';
+  if (pathname.includes('/parse')) return 'parser';
   return 'generator';
 }
 
-export default function MainLayout({ children }: { children: ReactNode }) {
+export function LangLayoutClient({ children, lang }: { children: ReactNode; lang: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const activeTab = getActiveTab(pathname);
@@ -25,22 +25,22 @@ export default function MainLayout({ children }: { children: ReactNode }) {
       if (e.altKey) {
         if (e.key === '1') {
           e.preventDefault();
-          router.push('/generate/v7');
+          router.push(`/${lang}/generate/v7`);
         }
         if (e.key === '2') {
           e.preventDefault();
-          router.push('/validate');
+          router.push(`/${lang}/validate`);
         }
         if (e.key === '3') {
           e.preventDefault();
-          router.push('/parse');
+          router.push(`/${lang}/parse`);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [router]);
+  }, [router, lang]);
 
   return (
     <main className="h-dvh bg-bg-deep flex flex-col overflow-hidden">
@@ -49,7 +49,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
           {/* 헤더 - 고정 높이 */}
           <header className="flex items-center justify-between pb-4 shrink-0 animate-fade-in">
             <div className="flex items-center gap-4">
-              <Link href="/generate/v7">
+              <Link href={`/${lang}/generate/v7`}>
                 <h1 className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
                   <span className="text-accent-mint">UUID</span>
                   <span className="text-text-primary">::</span>
@@ -90,7 +90,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
             {/* 메인 카드 */}
             <Card className="p-3 sm:p-6 border-t-0 flex-1 flex flex-col min-h-0">
               <nav className="mb-3 sm:mb-4 shrink-0">
-                <TabNav activeTab={activeTab} />
+                <TabNav activeTab={activeTab} lang={lang} />
               </nav>
 
               <ErrorBoundary>
@@ -113,11 +113,17 @@ export default function MainLayout({ children }: { children: ReactNode }) {
           >
             <div className="flex items-center justify-center gap-2 sm:gap-4 text-text-muted font-mono text-[10px] sm:text-xs">
               <span className="flex items-center gap-1.5 sm:gap-2">
-                <Link href="/generate/v1" className="text-accent-cyan hover:underline">v1</Link>
+                <Link href={`/${lang}/generate/v1`} className="text-accent-cyan hover:underline">
+                  v1
+                </Link>
                 <span className="text-text-muted/50">/</span>
-                <Link href="/generate/v4" className="text-accent-amber hover:underline">v4</Link>
+                <Link href={`/${lang}/generate/v4`} className="text-accent-amber hover:underline">
+                  v4
+                </Link>
                 <span className="text-text-muted/50">/</span>
-                <Link href="/generate/v7" className="text-accent-mint hover:underline">v7</Link>
+                <Link href={`/${lang}/generate/v7`} className="text-accent-mint hover:underline">
+                  v7
+                </Link>
               </span>
               <span className="text-text-muted/30">|</span>
               <a
@@ -132,15 +138,21 @@ export default function MainLayout({ children }: { children: ReactNode }) {
 
             <div className="hidden sm:flex mt-2 items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt/⌥+1</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">
+                  Alt/⌥+1
+                </kbd>
                 <span className="ml-1">GEN</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt/⌥+2</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">
+                  Alt/⌥+2
+                </kbd>
                 <span className="ml-1">VAL</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt/⌥+3</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">
+                  Alt/⌥+3
+                </kbd>
                 <span className="ml-1">PARSE</span>
               </span>
             </div>

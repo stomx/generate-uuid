@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { StructuredData } from './structured-data';
 import { AnalyticsScripts, GtmNoscript } from '@/components/common/AnalyticsScripts';
 import './globals.css';
 
@@ -99,9 +98,6 @@ export default function RootLayout({
         {/* Resource Hints for Performance */}
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-
-        {/* Structured Data for SEO */}
-        <StructuredData />
 
         {/* Analytics Scripts (disabled on localhost, client-only) */}
         <AnalyticsScripts />
