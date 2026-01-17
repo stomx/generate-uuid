@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useLocalStorage } from '../useLocalStorage';
+import { useLocalStorage, __resetLocalStorageStores } from '../useLocalStorage';
 
 // localStorage 모킹
 const localStorageMock = (() => {
@@ -27,6 +27,7 @@ describe('useLocalStorage', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllMocks();
+    __resetLocalStorageStores();
   });
 
   it('초기값을 반환해야 함', () => {

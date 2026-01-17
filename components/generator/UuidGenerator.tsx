@@ -1,13 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui';
 import { VersionSelector } from './VersionSelector';
 import { OptionsPanel } from './OptionsPanel';
 import { useUuidGenerator } from '@/hooks';
 import { copyToClipboard } from '@/lib/utils/clipboard';
+import type { SupportedUuidVersion } from '@/types/uuid';
 
-export function UuidGenerator() {
+interface UuidGeneratorProps {
+  initialVersion?: SupportedUuidVersion;
+}
+
+export function UuidGenerator({ initialVersion }: UuidGeneratorProps) {
+  const router = useRouter();
   const {
     uuids,
     version,
@@ -15,7 +22,13 @@ export function UuidGenerator() {
     generate,
     setVersion,
     setOptions,
-  } = useUuidGenerator();
+  } = useUuidGenerator({ initialVersion });
+
+  // 버전 변경 시 URL 네비게이션
+  const handleVersionChange = useCallback((newVersion: SupportedUuidVersion) => {
+    setVersion(newVersion);
+    router.push(`/generate/${newVersion}`);
+  }, [setVersion, router]);
 
   const [copied, setCopied] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -54,15 +67,15 @@ export function UuidGenerator() {
         const key = e.key.toLowerCase();
         if (key === 'q') {
           e.preventDefault();
-          setVersion('v1');
+          handleVersionChange('v1');
         }
         if (key === 'w') {
           e.preventDefault();
-          setVersion('v4');
+          handleVersionChange('v4');
         }
         if (key === 'e') {
           e.preventDefault();
-          setVersion('v7');
+          handleVersionChange('v7');
         }
         if (key === 'n') {
           e.preventDefault();
@@ -79,7 +92,7 @@ export function UuidGenerator() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [setVersion, generate]);
+  }, [handleVersionChange, generate]);
 
   // 전체 복사
   const handleCopyAll = async () => {
@@ -121,7 +134,7 @@ export function UuidGenerator() {
     <div className="flex flex-col h-full min-h-0 gap-3 sm:gap-4">
       {/* Version Selector */}
       <div className="shrink-0">
-        <VersionSelector selected={version} onChange={setVersion} />
+        <VersionSelector selected={version} onChange={handleVersionChange} />
       </div>
 
       {/* Controls: Options + Buttons */}

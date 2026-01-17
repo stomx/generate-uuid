@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 
 export type TabId = 'generator' | 'validator' | 'parser';
 
@@ -8,30 +9,30 @@ interface Tab {
   label: string;
   shortLabel: string;
   shortcut: string;
+  href: string;
 }
 
 const TABS: Tab[] = [
-  { id: 'generator', label: 'Generate', shortLabel: 'GEN', shortcut: '1' },
-  { id: 'validator', label: 'Validate', shortLabel: 'VAL', shortcut: '2' },
-  { id: 'parser', label: 'Parse', shortLabel: 'PARSE', shortcut: '3' },
+  { id: 'generator', label: 'Generate', shortLabel: 'GEN', shortcut: '1', href: '/generate/v7' },
+  { id: 'validator', label: 'Validate', shortLabel: 'VAL', shortcut: '2', href: '/validate' },
+  { id: 'parser', label: 'Parse', shortLabel: 'PARSE', shortcut: '3', href: '/parse' },
 ];
 
 interface TabNavProps {
   activeTab: TabId;
-  onTabChange: (tab: TabId) => void;
 }
 
-export function TabNav({ activeTab, onTabChange }: TabNavProps) {
+export function TabNav({ activeTab }: TabNavProps) {
   return (
     <div role="tablist" aria-label="UUID 도구 선택" className="flex border-b border-border-subtle -mx-1 px-1">
       {TABS.map((tab) => (
-        <button
+        <Link
           key={tab.id}
+          href={tab.href}
           role="tab"
           data-testid={`tab-${tab.id}`}
           aria-selected={activeTab === tab.id}
           aria-controls={`panel-${tab.id}`}
-          onClick={() => onTabChange(tab.id)}
           className={`
             relative flex-1 sm:flex-none
             px-3 sm:px-6 py-2.5 sm:py-3
@@ -50,7 +51,7 @@ export function TabNav({ activeTab, onTabChange }: TabNavProps) {
           <span className="hidden sm:inline text-text-muted text-xs mr-2">[{tab.shortcut}]</span>
           <span className="sm:hidden">{tab.shortLabel}</span>
           <span className="hidden sm:inline">{tab.label}</span>
-        </button>
+        </Link>
       ))}
     </div>
   );
