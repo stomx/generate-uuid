@@ -262,11 +262,12 @@ export function createTwitterMetadata(
 }
 
 // 언어 대체 링크 생성
-export function createAlternateLinks(path: string): Metadata['alternates'] {
+export function createAlternateLinks(locale: Locale, path: string): Metadata['alternates'] {
   const baseUrl = 'https://uuid.stomx.net';
+  const fullPath = locale === 'ko' ? `/ko${path}` : path;
 
   return {
-    canonical: `${baseUrl}${path}`,
+    canonical: `${baseUrl}${fullPath}`,
     languages: {
       en: `${baseUrl}${path}`,
       ko: `${baseUrl}/ko${path}`,
@@ -288,6 +289,6 @@ export function generatePageMetadata(
     metadataBase: new URL('https://uuid.stomx.net'),
     openGraph: createOpenGraphMetadata(locale, page, path),
     twitter: createTwitterMetadata(locale, page),
-    alternates: createAlternateLinks(path),
+    alternates: createAlternateLinks(locale, path),
   };
 }

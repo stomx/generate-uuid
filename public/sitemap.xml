@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <!-- Root (redirects to /generate/v7 or /ko/generate/v7 based on browser language) -->
+  <!-- Root (redirects to /generate/v7) -->
   <url>
-    <loc>https://uuid.stomx.net</loc>
+    <loc>https://uuid.stomx.net/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- English Pages (no locale prefix) -->
   <url>
-    <loc>https://uuid.stomx.net/generate/v7</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v7" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v7" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v7" />
+    <loc>https://uuid.stomx.net/generate/v7/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v7/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v7/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v7/" />
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/generate/v4</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v4" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v4" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v4" />
+    <loc>https://uuid.stomx.net/generate/v4/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v4/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v4/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v4/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/generate/v1</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v1" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v1" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v1" />
+    <loc>https://uuid.stomx.net/generate/v1/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v1/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v1/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v1/" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/validate</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/validate" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/validate" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/validate" />
+    <loc>https://uuid.stomx.net/validate/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/validate/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/validate/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/validate/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/parse</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/parse" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/parse" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/parse" />
+    <loc>https://uuid.stomx.net/parse/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/parse/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/parse/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/parse/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Korean Pages (with /ko prefix) -->
   <url>
-    <loc>https://uuid.stomx.net/ko/generate/v7</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v7" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v7" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v7" />
+    <loc>https://uuid.stomx.net/ko/generate/v7/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v7/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v7/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v7/" />
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/ko/generate/v4</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v4" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v4" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v4" />
+    <loc>https://uuid.stomx.net/ko/generate/v4/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v4/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v4/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v4/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/ko/generate/v1</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v1" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v1" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v1" />
+    <loc>https://uuid.stomx.net/ko/generate/v1/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/generate/v1/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/generate/v1/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/generate/v1/" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/ko/validate</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/validate" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/validate" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/validate" />
+    <loc>https://uuid.stomx.net/ko/validate/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/validate/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/validate/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/validate/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://uuid.stomx.net/ko/parse</loc>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/parse" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/parse" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/parse" />
+    <loc>https://uuid.stomx.net/ko/parse/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/parse/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://uuid.stomx.net/parse/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/parse/" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
