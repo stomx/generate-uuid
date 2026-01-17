@@ -1,13 +1,8 @@
 import dynamic from 'next/dynamic';
-import { locales, generatePageMetadata, type Locale } from '@/lib/i18n';
+import { generatePageMetadata } from '@/lib/i18n';
 
-export async function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ lang: Locale }> }) {
-  const { lang } = await params;
-  return generatePageMetadata(lang, 'validate', '/validate');
+export async function generateMetadata() {
+  return generatePageMetadata('en', 'validate', '/validate');
 }
 
 const UuidValidator = dynamic(

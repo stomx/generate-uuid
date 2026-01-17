@@ -2,13 +2,14 @@ import type { Locale } from './index';
 
 export function getStructuredData(locale: Locale) {
   const baseUrl = 'https://uuid.stomx.net';
+  const localePrefix = locale === 'ko' ? '/ko' : '';
 
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'UUID Generator',
     alternateName: 'UUID::GEN',
-    url: `${baseUrl}/${locale}`,
+    url: `${baseUrl}${localePrefix}`,
     description:
       locale === 'en'
         ? 'Free online UUID generator and validator. Generate UUID v1, v4, v7 with timestamp extraction. Parse, validate, and save UUID history. No registration required.'
@@ -73,25 +74,25 @@ export function getStructuredData(locale: Locale) {
         '@type': 'ListItem',
         position: 1,
         name: locale === 'en' ? 'Home' : '홈',
-        item: `${baseUrl}/${locale}`,
+        item: `${baseUrl}${localePrefix}`,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: locale === 'en' ? 'UUID Generator' : 'UUID 생성기',
-        item: `${baseUrl}/${locale}/generate/v7`,
+        item: `${baseUrl}${localePrefix}/generate/v7`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: locale === 'en' ? 'UUID Validator' : 'UUID 검증기',
-        item: `${baseUrl}/${locale}/validate`,
+        item: `${baseUrl}${localePrefix}/validate`,
       },
       {
         '@type': 'ListItem',
         position: 4,
         name: locale === 'en' ? 'UUID Parser' : 'UUID 파서',
-        item: `${baseUrl}/${locale}/parse`,
+        item: `${baseUrl}${localePrefix}/parse`,
       },
     ],
   };

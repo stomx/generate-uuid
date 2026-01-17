@@ -226,11 +226,12 @@ export function createOpenGraphMetadata(
 ): Metadata['openGraph'] {
   const baseUrl = 'https://uuid.stomx.net';
   const meta = metadata[locale][page];
+  const fullPath = locale === 'ko' ? `/ko${path}` : path;
 
   return {
     title: meta.title as string,
     description: meta.description as string,
-    url: `${baseUrl}/${locale}${path}`,
+    url: `${baseUrl}${fullPath}`,
     siteName: 'UUID Generator',
     locale: locale === 'en' ? 'en_US' : 'ko_KR',
     type: 'website',
@@ -265,11 +266,11 @@ export function createAlternateLinks(path: string): Metadata['alternates'] {
   const baseUrl = 'https://uuid.stomx.net';
 
   return {
-    canonical: `${baseUrl}/en${path}`,
+    canonical: `${baseUrl}${path}`,
     languages: {
-      en: `${baseUrl}/en${path}`,
+      en: `${baseUrl}${path}`,
       ko: `${baseUrl}/ko${path}`,
-      'x-default': `${baseUrl}/en${path}`,
+      'x-default': `${baseUrl}${path}`,
     },
   };
 }

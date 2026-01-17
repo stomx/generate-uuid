@@ -24,12 +24,14 @@ interface TabNavProps {
 }
 
 export function TabNav({ activeTab, lang = 'en' }: TabNavProps) {
+  const langPrefix = lang === 'ko' ? '/ko' : '';
+
   return (
     <div role="tablist" aria-label="UUID 도구 선택" className="flex border-b border-border-subtle -mx-1 px-1">
       {TABS.map((tab) => (
         <Link
           key={tab.id}
-          href={`/${lang}${tab.path}`}
+          href={`${langPrefix}${tab.path}`}
           role="tab"
           data-testid={`tab-${tab.id}`}
           aria-selected={activeTab === tab.id}

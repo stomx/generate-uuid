@@ -17,6 +17,7 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
   const pathname = usePathname();
   const router = useRouter();
   const activeTab = getActiveTab(pathname);
+  const langPrefix = lang === 'ko' ? '/ko' : '';
 
   // 키보드 단축키 (Option/Alt + 숫자) - 입력 필드에서도 동작
   useEffect(() => {
@@ -25,22 +26,22 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
       if (e.altKey) {
         if (e.key === '1') {
           e.preventDefault();
-          router.push(`/${lang}/generate/v7`);
+          router.push(`${langPrefix}/generate/v7`);
         }
         if (e.key === '2') {
           e.preventDefault();
-          router.push(`/${lang}/validate`);
+          router.push(`${langPrefix}/validate`);
         }
         if (e.key === '3') {
           e.preventDefault();
-          router.push(`/${lang}/parse`);
+          router.push(`${langPrefix}/parse`);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [router, lang]);
+  }, [router, langPrefix]);
 
   return (
     <main className="h-dvh bg-bg-deep flex flex-col overflow-hidden">
@@ -49,7 +50,7 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
           {/* 헤더 - 고정 높이 */}
           <header className="flex items-center justify-between pb-4 shrink-0 animate-fade-in">
             <div className="flex items-center gap-4">
-              <Link href={`/${lang}/generate/v7`}>
+              <Link href={`${langPrefix}/generate/v7`}>
                 <h1 className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
                   <span className="text-accent-mint">UUID</span>
                   <span className="text-text-primary">::</span>
@@ -113,15 +114,15 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
           >
             <div className="flex items-center justify-center gap-2 sm:gap-4 text-text-muted font-mono text-[10px] sm:text-xs">
               <span className="flex items-center gap-1.5 sm:gap-2">
-                <Link href={`/${lang}/generate/v1`} className="text-accent-cyan hover:underline">
+                <Link href={`${langPrefix}/generate/v1`} className="text-accent-cyan hover:underline">
                   v1
                 </Link>
                 <span className="text-text-muted/50">/</span>
-                <Link href={`/${lang}/generate/v4`} className="text-accent-amber hover:underline">
+                <Link href={`${langPrefix}/generate/v4`} className="text-accent-amber hover:underline">
                   v4
                 </Link>
                 <span className="text-text-muted/50">/</span>
-                <Link href={`/${lang}/generate/v7`} className="text-accent-mint hover:underline">
+                <Link href={`${langPrefix}/generate/v7`} className="text-accent-mint hover:underline">
                   v7
                 </Link>
               </span>
