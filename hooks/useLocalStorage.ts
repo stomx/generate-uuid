@@ -81,7 +81,8 @@ function createLocalStorageStore<T>(key: string, initialValue: T) {
 }
 
 // 스토어 캐시 (같은 키에 대해 동일한 스토어 사용)
-const storeCache = new Map<string, ReturnType<typeof createLocalStorageStore>>();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const storeCache = new Map<string, any>();
 
 function getStore<T>(key: string, initialValue: T) {
   if (!storeCache.has(key)) {
