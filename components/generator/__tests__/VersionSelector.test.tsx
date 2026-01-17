@@ -100,9 +100,9 @@ describe('VersionSelector', () => {
     it('단축키 힌트가 표시되어야 함', () => {
       render(<VersionSelector selected="v4" onChange={mockOnChange} />);
 
-      expect(screen.getByText('Alt+Q')).toBeInTheDocument();
-      expect(screen.getByText('Alt+W')).toBeInTheDocument();
-      expect(screen.getByText('Alt+E')).toBeInTheDocument();
+      expect(screen.getByText('Alt/⌥+Q')).toBeInTheDocument();
+      expect(screen.getByText('Alt/⌥+W')).toBeInTheDocument();
+      expect(screen.getByText('Alt/⌥+E')).toBeInTheDocument();
     });
   });
 
