@@ -219,3 +219,27 @@ GitHub Pages (Custom Domain: uuid.stomx.net)
 - Google Tag Manager (GTM-WWD73RTG)
 - Microsoft Clarity (v27j4cca2q)
 - Google AdSense (환경변수: NEXT_PUBLIC_ADSENSE_CLIENT_ID)
+
+## Current Work (진행 중인 작업)
+
+### Branch: `fix/color-contrast-wcag`
+
+**목표**: WCAG 2.1 색상 대비 기준 충족
+
+**배경**:
+- `e2e/accessibility.spec.ts`에서 axe-core를 통한 WCAG 2.0 A/AA 자동 테스트 수행 중
+- 색상 대비 관련 추가 개선 필요 가능성 검토
+
+**작업 계획**:
+1. 현재 색상 대비 비율 분석 (text-primary, text-muted 등)
+2. WCAG 2.1 AA 기준 (4.5:1 일반 텍스트, 3:1 큰 텍스트) 충족 여부 확인
+3. 미충족 항목 CSS 변수 수정 (`globals.css`)
+4. 접근성 테스트 실행으로 검증
+
+**다른 디바이스에서 이어서 작업 시**:
+```bash
+git fetch origin
+git checkout fix/color-contrast-wcag
+npm install
+npm run test:e2e -- --project=chromium accessibility.spec.ts
+```
