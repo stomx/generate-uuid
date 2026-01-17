@@ -23,10 +23,11 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// crypto.randomUUID 모킹
+// crypto.randomUUID 모킹 - 고유 ID 생성을 위한 카운터 사용
+let uuidCounter = 0;
 vi.stubGlobal('crypto', {
   ...crypto,
-  randomUUID: vi.fn(() => 'mock-uuid-id'),
+  randomUUID: vi.fn(() => `mock-uuid-id-${++uuidCounter}`),
 });
 
 describe('UuidValidator', () => {
