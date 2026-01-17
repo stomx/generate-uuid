@@ -1,0 +1,7 @@
+1:"$Sreact.fragment"
+2:"$Sreact.suspense"
+3:I[52157,["/_next/static/chunks/18742e4abe785207.js","/_next/static/chunks/0e43b4a8040c2915.js","/_next/static/chunks/0c15020a13e400cf.js","/_next/static/chunks/cec265a86e1b645d.js"],"PreloadChunks"]
+4:I[26362,["/_next/static/chunks/18742e4abe785207.js","/_next/static/chunks/0e43b4a8040c2915.js","/_next/static/chunks/0c15020a13e400cf.js","/_next/static/chunks/cec265a86e1b645d.js"],"UuidParser"]
+5:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/d2be314c3ece3fbe.js"],"OutletBoundary"]
+0:{"buildId":"e8D0d29VOH6VJCymfRm_a","rsc":["$","$1","c",{"children":[["$","$2",null,{"fallback":["$","div",null,{"className":"flex items-center justify-center h-32 text-text-muted font-mono text-sm","children":["$","span",null,{"className":"animate-pulse","children":"Loading..."}]}],"children":[["$","$L3",null,{"moduleIds":["3873351836669492880"]}],["$","$L4",null,{}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/cec265a86e1b645d.js","async":true}]],["$","$L5",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"loading":null,"isPartial":false}
+6:null
