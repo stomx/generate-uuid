@@ -43,7 +43,7 @@ npm run test:e2e    # E2E tests
 | `npm run dev` | Development server (http://localhost:3000) |
 | `npm run build` | Production build (static export to /out) |
 | `npm run test` | Vitest watch mode |
-| `npm run test:run` | Single test run (241 unit tests) |
+| `npm run test:run` | Single test run (278 unit tests) |
 | `npm run test:e2e` | Playwright E2E tests (26 tests) |
 | `npm run lint` | ESLint |
 | `npm run deploy` | Build + GitHub Pages deploy |

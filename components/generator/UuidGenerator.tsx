@@ -41,7 +41,7 @@ export function UuidGenerator() {
     }
   }, [uuids]);
 
-  // 버전 변경 단축키
+  // 버전 변경 단축키 (Option/Alt + Q/W/E) 및 생성 단축키 (Option/Alt + N)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // 입력 필드에서는 무시
@@ -49,12 +49,29 @@ export function UuidGenerator() {
         return;
       }
 
-      const key = e.key.toLowerCase();
-      if (key === 'q') setVersion('v1');
-      if (key === 'w') setVersion('v4');
-      if (key === 'e') setVersion('v7');
+      // Option(Mac)/Alt(Windows) 조합 필요
+      if (e.altKey) {
+        const key = e.key.toLowerCase();
+        if (key === 'q') {
+          e.preventDefault();
+          setVersion('v1');
+        }
+        if (key === 'w') {
+          e.preventDefault();
+          setVersion('v4');
+        }
+        if (key === 'e') {
+          e.preventDefault();
+          setVersion('v7');
+        }
+        if (key === 'n') {
+          e.preventDefault();
+          generate();
+        }
+      }
 
       // Enter: 버튼에 포커스가 있으면 해당 버튼의 기본 동작 우선
+      const key = e.key.toLowerCase();
       if (key === 'enter' && !(e.target instanceof HTMLButtonElement)) {
         generate();
       }

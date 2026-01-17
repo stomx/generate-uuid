@@ -150,16 +150,19 @@ test('should validate UUID', async ({ page }) => {
 
 ### 테스트 현황 (2026-01-17)
 
-**Unit 241개 + E2E 26개 = 총 267개**
+**Unit 278개 + E2E 26개 = 총 304개**
 
 | 영역 | 파일 | 테스트 수 |
 |------|------|-----------|
-| **UUID 라이브러리** | `lib/uuid/__tests__/` | 53 |
+| **UUID 라이브러리** | `lib/uuid/__tests__/` | 70 |
 | └ v1.test.ts | 타임스탬프 기반 생성 | 8 |
 | └ v4.test.ts | 랜덤 생성 | 6 |
 | └ v7.test.ts | Unix ms 타임스탬프 | 7 |
 | └ validator.test.ts | 형식/버전 검증 | 16 |
-| └ parser.test.ts | UUID 파싱 | 19 |
+| └ parser.test.ts | UUID 파싱 | 16 |
+| └ common.test.ts | formatUuid, applyOptions | 17 |
+| **Utils** | `lib/utils/__tests__/` | 17 |
+| └ clipboard.test.ts | 클립보드 복사 (API + fallback) | 17 |
 | **Hooks** | `hooks/__tests__/` | 25 |
 | └ useLocalStorage.test.ts | localStorage 상태 관리 | 7 |
 | └ useTheme.test.ts | 테마 전환 로직 | 8 |
@@ -177,7 +180,10 @@ test('should validate UUID', async ({ page }) => {
 | └ TabNav.test.tsx | 탭 네비게이션 | 8 |
 | └ ThemeToggle.test.tsx | 테마 토글 버튼 | 8 |
 | └ ErrorBoundary.test.tsx | 에러 바운더리 | 6 |
-| **Generator** | `components/generator/__tests__/` | 7 |
+| **Generator** | `components/generator/__tests__/` | 41 |
+| └ UuidGenerator.test.tsx | UUID 생성 UI | 7 |
+| └ VersionSelector.test.tsx | 버전 선택 라디오 | 17 |
+| └ OptionsPanel.test.tsx | 옵션 패널 (count, uppercase, hyphens) | 17 |
 | **Validator** | `components/validator/__tests__/` | 14 |
 | **Parser** | `components/parser/__tests__/` | 17 |
 | **E2E** | `e2e/*.spec.ts` | 26 |

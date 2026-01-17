@@ -38,7 +38,7 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  // 키보드 단축키
+  // 키보드 단축키 (Option/Alt + 숫자)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // 입력 필드에서는 무시
@@ -46,17 +46,20 @@ export default function Home() {
         return;
       }
 
-      if (e.key === '1') {
-        e.preventDefault();
-        setActiveTab('generator');
-      }
-      if (e.key === '2') {
-        e.preventDefault();
-        setActiveTab('validator');
-      }
-      if (e.key === '3') {
-        e.preventDefault();
-        setActiveTab('parser');
+      // Option(Mac)/Alt(Windows) + 숫자로 탭 전환
+      if (e.altKey) {
+        if (e.key === '1') {
+          e.preventDefault();
+          setActiveTab('generator');
+        }
+        if (e.key === '2') {
+          e.preventDefault();
+          setActiveTab('validator');
+        }
+        if (e.key === '3') {
+          e.preventDefault();
+          setActiveTab('parser');
+        }
       }
     };
 
@@ -168,15 +171,15 @@ export default function Home() {
             {/* 키보드 단축키 힌트 - 데스크톱만 */}
             <div className="hidden sm:flex mt-2 items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">1</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">⌥1</kbd>
                 <span className="ml-1">GEN</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">2</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">⌥2</kbd>
                 <span className="ml-1">VAL</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">3</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">⌥3</kbd>
                 <span className="ml-1">PARSE</span>
               </span>
             </div>
