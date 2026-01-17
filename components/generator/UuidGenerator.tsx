@@ -11,9 +11,10 @@ import type { SupportedUuidVersion } from '@/types/uuid';
 
 interface UuidGeneratorProps {
   initialVersion?: SupportedUuidVersion;
+  lang?: string;
 }
 
-export function UuidGenerator({ initialVersion }: UuidGeneratorProps) {
+export function UuidGenerator({ initialVersion, lang = 'en' }: UuidGeneratorProps) {
   const router = useRouter();
   const {
     uuids,
@@ -27,8 +28,9 @@ export function UuidGenerator({ initialVersion }: UuidGeneratorProps) {
   // 버전 변경 시 URL 네비게이션
   const handleVersionChange = useCallback((newVersion: SupportedUuidVersion) => {
     setVersion(newVersion);
-    router.push(`/generate/${newVersion}`);
-  }, [setVersion, router]);
+    const langPrefix = lang === 'ko' ? '/ko' : '';
+    router.push(`${langPrefix}/generate/${newVersion}`);
+  }, [setVersion, router, lang]);
 
   const [copied, setCopied] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);

@@ -6,5 +6,5 @@ export async function generateMetadata() {
 }
 
 export default function GenerateV4Page() {
-  return <UuidGenerator initialVersion="v4" />;
+  return <UuidGenerator initialVersion="v4" lang="ko" />;
 }
