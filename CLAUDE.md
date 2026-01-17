@@ -21,8 +21,8 @@ npm run deploy       # Build + gh-pages deploy (GitHub Actions 비활성화 상�
 
 # Test
 npm run test         # Vitest watch mode
-npm run test:run     # Single run (241 tests)
-npm run test:e2e     # Playwright E2E tests
+npm run test:run     # Single run (304 unit tests)
+npm run test:e2e     # Playwright E2E tests (45 tests × 2 projects)
 npm run test:e2e:ui  # Playwright UI mode
 
 # Lint
@@ -96,6 +96,22 @@ Validator와 Parser 컴포넌트에 localStorage 기반 히스토리 기능이 �
 - 복사, 삭제, 전체 삭제 지원
 - `useLocalStorage` 훅으로 상태 관리
 
+### 접근성 (Accessibility)
+
+**ARIA 레이블**:
+- 아이콘 전용 버튼에는 `aria-label` 필수 (예: `aria-label="전체 복사"`)
+- Radix UI 컴포넌트 (Select 등)에도 명시적 레이블 제공
+
+**키보드 단축키** (입력 필드 내에서는 비활성화):
+| 기능 | 단축키 |
+|------|--------|
+| 탭 전환 | Alt/⌥ + 1, 2, 3 |
+| 버전 전환 | Alt/⌥ + Q, W, E |
+| UUID 생성 | Alt/⌥ + N 또는 Enter |
+
+**스크린 리더 지원**:
+- `<div role="status" aria-live="assertive">` 영역으로 상태 변경 알림
+
 ### 컴포넌트 Export
 각 폴더의 `index.ts`에서 barrel export. 새 컴포넌트 추가 시 index에 등록 필요.
 
@@ -121,6 +137,27 @@ screen.getByTestId('validation-result')  // 특정 영역 선택
    - 유닛 테스트: `lib/**/__tests__/*.test.ts`
    - 컴포넌트 테스트: `components/**/__tests__/*.test.tsx`
    - E2E 테스트: `e2e/*.spec.ts`
+
+### E2E 테스트 (Playwright)
+
+**프로젝트 구성** (`playwright.config.ts`):
+- `chromium`: Desktop Chrome + 클립보드 권한
+- `mobile`: iPhone 14 (WebKit - 클립보드 권한 미지원)
+
+**조건부 테스트 스킵**:
+```typescript
+test.beforeEach(async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'mobile', 'Desktop tests only');
+  await page.goto('/');
+});
+```
+
+**테스트 파일**:
+- `generator.spec.ts` - UUID 생성, 복사, 키보드 단축키
+- `validator.spec.ts` - UUID 검증 및 히스토리
+- `parser.spec.ts` - UUID 파싱 및 히스토리
+- `accessibility.spec.ts` - WCAG 2.0 A/AA (@axe-core/playwright)
+- `mobile.spec.ts` - 모바일 레이아웃 및 터치 인터랙션
 
 ### 테스트 모킹 패턴
 
@@ -164,6 +201,17 @@ beforeAll(() => {
 GitHub Pages (Custom Domain: uuid.stomx.net)
 - GitHub Actions 비활성화 상태 (billing issue)
 - 수동 배포: `npm run deploy` 사용
+
+## Static Assets
+
+| 에셋 | 경로 | 용도 |
+|------|------|------|
+| Favicon | `app/favicon.ico` | 브라우저 탭 아이콘 |
+| App Icon | `app/icon.png` | PWA/일반 아이콘 (32x32) |
+| Apple Icon | `app/apple-icon.png` | iOS 홈화면 (180x180) |
+| OG Image | `public/og-image.jpg` | SNS 미리보기 (1200x630) |
+
+**참고**: Next.js 14 파일 기반 메타데이터 규칙 사용. `app/` 디렉토리의 아이콘은 자동 감지됨.
 
 ## Analytics Integration
 
