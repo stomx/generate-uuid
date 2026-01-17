@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('UUID Validator', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'Desktop tests only');
     await page.goto('/');
     // Validator 탭으로 이동
     await page.click('[data-testid="tab-validator"]');
@@ -67,7 +68,8 @@ test.describe('UUID Validator', () => {
 });
 
 test.describe('UUID Validator 히스토리', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'Desktop tests only');
     // localStorage 초기화
     await page.goto('/');
     await page.evaluate(() => localStorage.clear());

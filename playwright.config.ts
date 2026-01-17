@@ -10,12 +10,18 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
-    permissions: ['clipboard-read', 'clipboard-write'],
   },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        permissions: ['clipboard-read', 'clipboard-write'],
+      },
+    },
+    {
+      name: 'mobile',
+      use: { ...devices['iPhone 14'] },
     },
   ],
   webServer: {

@@ -29,7 +29,7 @@ export function OptionsPanel({ options, onChange }: OptionsPanelProps) {
           value={String(options.count)}
           onValueChange={(value) => onChange({ count: Number(value) })}
         >
-          <SelectTrigger className="min-w-[50px] sm:min-w-[60px]">
+          <SelectTrigger className="min-w-[50px] sm:min-w-[60px]" aria-label="UUID 생성 개수">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('UUID Parser', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'Desktop tests only');
     await page.goto('/');
     // Parser 탭으로 이동
     await page.click('[data-testid="tab-parser"]');
@@ -65,7 +66,8 @@ test.describe('UUID Parser', () => {
 });
 
 test.describe('UUID Parser 히스토리', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'Desktop tests only');
     // localStorage 초기화
     await page.goto('/');
     await page.evaluate(() => localStorage.clear());
