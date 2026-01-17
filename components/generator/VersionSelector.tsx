@@ -10,9 +10,9 @@ interface Version {
 }
 
 const VERSIONS: (Version & { shortcut: string })[] = [
-  { id: 'v1', label: 'V1', description: 'Timestamp-based', badge: 'TIME', shortcut: '⌥Q' },
-  { id: 'v4', label: 'V4', description: 'Random', badge: 'RAND', shortcut: '⌥W' },
-  { id: 'v7', label: 'V7', description: 'Sortable', badge: 'SORT', shortcut: '⌥E' },
+  { id: 'v1', label: 'V1', description: 'Timestamp-based', badge: 'TIME', shortcut: 'Alt+Q' },
+  { id: 'v4', label: 'V4', description: 'Random', badge: 'RAND', shortcut: 'Alt+W' },
+  { id: 'v7', label: 'V7', description: 'Sortable', badge: 'SORT', shortcut: 'Alt+E' },
 ];
 
 interface VersionSelectorProps {

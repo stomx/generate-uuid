@@ -171,15 +171,15 @@ export default function Home() {
             {/* 키보드 단축키 힌트 - 데스크톱만 */}
             <div className="hidden sm:flex mt-2 items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">⌥1</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt+1</kbd>
                 <span className="ml-1">GEN</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">⌥2</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt+2</kbd>
                 <span className="ml-1">VAL</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">⌥3</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt+3</kbd>
                 <span className="ml-1">PARSE</span>
               </span>
             </div>
