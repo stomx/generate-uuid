@@ -19,6 +19,13 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
   const activeTab = getActiveTab(pathname);
   const langPrefix = lang === 'ko' ? '/ko' : '';
 
+  // 언어 변경 핸들러
+  const handleLanguageToggle = () => {
+    const currentPath = pathname.replace(/^\/ko/, ''); // /ko 제거
+    const newPath = lang === 'ko' ? currentPath : `/ko${currentPath}`;
+    router.push(newPath);
+  };
+
   // 키보드 단축키 (Option/Alt + 숫자) - 입력 필드에서도 동작
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,6 +74,13 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
                 <span className="w-2 h-2 rounded-full bg-accent-mint animate-pulse" />
                 <span>ONLINE</span>
               </div>
+              <button
+                onClick={handleLanguageToggle}
+                className="px-2 py-1 text-xs font-mono border border-border-subtle text-text-muted hover:text-accent-mint hover:border-accent-mint transition-colors"
+                aria-label={lang === 'ko' ? 'Switch to English' : '한국어로 전환'}
+              >
+                {lang === 'ko' ? 'EN' : 'KO'}
+              </button>
               <ThemeToggle />
             </div>
           </header>
