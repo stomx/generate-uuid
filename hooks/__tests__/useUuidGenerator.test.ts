@@ -15,6 +15,24 @@ describe('useUuidGenerator', () => {
     });
   });
 
+  it('initialVersion 파라미터로 초기 버전을 설정할 수 있어야 함', () => {
+    const { result } = renderHook(() => useUuidGenerator({ initialVersion: 'v1' }));
+
+    expect(result.current.version).toBe('v1');
+  });
+
+  it('initialVersion이 v4일 때 v4 UUID를 생성해야 함', () => {
+    const { result } = renderHook(() => useUuidGenerator({ initialVersion: 'v4' }));
+
+    act(() => {
+      result.current.generate();
+    });
+
+    // v4 UUID의 버전 비트 확인 (13번째 문자가 4)
+    const uuid = result.current.uuids[0];
+    expect(uuid[14]).toBe('4');
+  });
+
   it('generate()가 UUID를 생성해야 함', () => {
     const { result } = renderHook(() => useUuidGenerator());
 

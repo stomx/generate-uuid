@@ -158,7 +158,7 @@ test.describe('Keyboard Shortcuts', () => {
     await expect(page.locator('#panel-generator')).toBeVisible();
   });
 
-  test('입력 필드에서 단축키가 작동하지 않아야 함', async ({ page }) => {
+  test('입력 필드에서도 단축키가 작동해야 함', async ({ page }) => {
     // Validator 탭으로 이동
     await page.keyboard.press('Alt+2');
     await expect(page.locator('#panel-validator')).toBeVisible();
@@ -167,10 +167,10 @@ test.describe('Keyboard Shortcuts', () => {
     const input = page.locator('#panel-validator input').first();
     await input.focus();
 
-    // Alt+1 눌러도 탭이 바뀌지 않아야 함 (입력 필드 내에서)
+    // Alt+1 누르면 탭이 변경되어야 함 (입력 필드 내에서도 단축키 우선)
     await page.keyboard.press('Alt+1');
 
-    // 여전히 Validator 탭이어야 함
-    await expect(page.locator('#panel-validator')).toBeVisible();
+    // Generator 탭으로 이동해야 함
+    await expect(page.locator('#panel-generator')).toBeVisible();
   });
 });
