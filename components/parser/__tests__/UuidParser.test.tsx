@@ -1,28 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { UuidParser } from '../UuidParser';
-import { __resetLocalStorageStores } from '@/hooks/useLocalStorage';
-
-// localStorage 모킹
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value;
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: vi.fn(() => {
-      store = {};
-    }),
-  };
-})();
-
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-});
 
 // crypto.randomUUID 모킹
 vi.stubGlobal('crypto', {
@@ -32,9 +10,7 @@ vi.stubGlobal('crypto', {
 
 describe('UuidParser', () => {
   beforeEach(() => {
-    localStorageMock.clear();
     vi.clearAllMocks();
-    __resetLocalStorageStores();
   });
   it('입력 필드가 렌더링되어야 함', () => {
     render(<UuidParser />);
@@ -169,9 +145,7 @@ describe('UuidParser', () => {
 
 describe('UuidParser 히스토리', () => {
   beforeEach(() => {
-    localStorageMock.clear();
     vi.clearAllMocks();
-    __resetLocalStorageStores();
   });
 
   it('파싱 후 히스토리에 추가되어야 함', async () => {
@@ -188,11 +162,8 @@ describe('UuidParser 히스토리', () => {
     await waitFor(() => {
       // 히스토리 섹션이 표시됨
       expect(screen.getByText('// PARSE_HISTORY')).toBeInTheDocument();
-      // localStorage에 저장됨
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'uuid-parse-history',
-        expect.any(String)
-      );
+      // 히스토리 카운트가 1로 증가
+      expect(screen.getByText('[1]')).toBeInTheDocument();
     });
   });
 
