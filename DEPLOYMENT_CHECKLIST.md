@@ -23,8 +23,8 @@ UUID Generator 프로덕션 배포를 위한 단계별 체크리스트
 ### 수동 확인
 - [ ] **테스트 통과**
   - [ ] 305 유닛 테스트 통과
-  - [ ] 76 E2E 테스트 통과 (chromium)
-  - [ ] 빌드 검증 44개 체크 통과
+  - [ ] 86 E2E 테스트 통과 (chromium)
+  - [ ] 빌드 검증 53개 체크 통과
 
 - [ ] **Git 상태**
   - [ ] 모든 변경사항 커밋됨
@@ -137,6 +137,8 @@ Node version: 22
 - [ ] 브라우저 개발자 도구로 HTML 소스 확인
 - [ ] 영어 페이지 `<html lang="en">` 확인
 - [ ] 한국어 페이지 `<html lang="ko">` 확인
+- [ ] 영어 404 페이지 `<html lang="en">` 확인
+- [ ] 한국어 404 페이지 `<html lang="ko">` 확인
 - [ ] Canonical URL 자기 참조 확인
 - [ ] Hreflang 태그 존재 확인 (en, ko, x-default)
 - [ ] OG 메타 태그 확인 (og:locale, og:image, etc.)

@@ -60,8 +60,8 @@ npm run test:e2e
 ```
 
 **검증 기준**:
-- ✅ 76 chromium tests passing
-- ✅ 76 mobile tests skipped (expected)
+- ✅ 86 chromium tests passing
+- ✅ 86 mobile tests skipped (expected)
 - ❌ 0 tests failing
 
 **실패 시**: E2E 테스트 로그 확인, 스크린샷 검토, 스킬 종료
@@ -84,7 +84,7 @@ npm run build
 ```
 
 **검증 기준**:
-- ✅ All 44 checks passed
+- ✅ All 53 checks passed
 - ❌ 0 checks failed
 
 **실패 시**: 실패한 검증 항목 출력, 스킬 종료
