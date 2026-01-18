@@ -9,9 +9,9 @@ const THEME_LABELS = {
 } as const;
 
 const THEME_ARIA = {
-  system: '시스템 설정 사용 중 - 라이트 모드로 전환',
-  light: '라이트 모드 - 다크 모드로 전환',
-  dark: '다크 모드 - 시스템 설정으로 전환',
+  system: 'SYS - System theme',
+  light: 'LT - Light theme',
+  dark: 'DK - Dark theme',
 } as const;
 
 export function ThemeToggle() {
