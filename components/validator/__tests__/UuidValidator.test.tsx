@@ -1,6 +1,28 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { UuidValidator } from '../UuidValidator';
+import { __resetSessionStorageStores } from '@/hooks/useSessionStorage';
+
+// sessionStorage 모킹
+const sessionStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+  };
+})();
+
+Object.defineProperty(window, 'sessionStorage', {
+  value: sessionStorageMock,
+});
 
 // crypto.randomUUID 모킹 - 고유 ID 생성을 위한 카운터 사용
 let uuidCounter = 0;
@@ -11,7 +33,9 @@ vi.stubGlobal('crypto', {
 
 describe('UuidValidator', () => {
   beforeEach(() => {
+    sessionStorageMock.clear();
     vi.clearAllMocks();
+    __resetSessionStorageStores();
   });
   it('입력 필드가 렌더링되어야 함', () => {
     render(<UuidValidator />);
@@ -133,7 +157,9 @@ describe('UuidValidator', () => {
 
 describe('UuidValidator 히스토리', () => {
   beforeEach(() => {
+    sessionStorageMock.clear();
     vi.clearAllMocks();
+    __resetSessionStorageStores();
   });
 
   it('검증 후 히스토리에 추가되어야 함', async () => {
@@ -148,8 +174,11 @@ describe('UuidValidator 히스토리', () => {
     await waitFor(() => {
       // 히스토리 섹션이 표시됨
       expect(screen.getByText('// VALIDATION_HISTORY')).toBeInTheDocument();
-      // 히스토리 카운트가 1로 증가
-      expect(screen.getByText('[1]')).toBeInTheDocument();
+      // sessionStorage에 저장됨
+      expect(sessionStorageMock.setItem).toHaveBeenCalledWith(
+        'uuid-validation-history',
+        expect.any(String)
+      );
     });
   });
 

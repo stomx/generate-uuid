@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Input, Button, Card } from '@/components/ui';
 import { validateUuid } from '@/lib/uuid';
+import { useSessionStorage } from '@/hooks';
 import { copyToClipboard } from '@/lib/utils/clipboard';
 import type { ValidationResult, ValidationHistoryItem } from '@/types/uuid';
 
@@ -11,7 +12,7 @@ const MAX_HISTORY = 20;
 export function UuidValidator() {
   const [input, setInput] = useState('');
   const [result, setResult] = useState<ValidationResult | null>(null);
-  const [history, setHistory] = useState<ValidationHistoryItem[]>([]);
+  const [history, setHistory] = useSessionStorage<ValidationHistoryItem[]>('uuid-validation-history', []);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

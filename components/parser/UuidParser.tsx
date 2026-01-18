@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Input, Button, Card } from '@/components/ui';
 import { parseUuid, formatParsedUuid, validateUuid } from '@/lib/uuid';
+import { useSessionStorage } from '@/hooks';
 import { copyToClipboard } from '@/lib/utils/clipboard';
 import type { ParseHistoryItem, ParsedUuid } from '@/types/uuid';
 
@@ -12,7 +13,7 @@ export function UuidParser() {
   const [input, setInput] = useState('');
   const [formatted, setFormatted] = useState<Record<string, string> | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [history, setHistory] = useState<ParseHistoryItem[]>([]);
+  const [history, setHistory] = useSessionStorage<ParseHistoryItem[]>('uuid-parse-history', []);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
