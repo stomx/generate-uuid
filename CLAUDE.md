@@ -119,7 +119,7 @@ npm run deploy       # Build + gh-pages deploy (GitHub Actions 비활성화 상�
 
 # Test
 npm run test         # Vitest watch mode
-npm run test:run     # Single run (304 unit tests)
+npm run test:run     # Single run (305 unit tests)
 npm run test:e2e     # Playwright E2E tests (76 tests × 2 projects = 152 total)
 npm run test:e2e:ui  # Playwright UI mode
 
@@ -298,9 +298,40 @@ beforeAll(() => {
 
 ## Deployment
 
-GitHub Pages (Custom Domain: uuid.stomx.net)
+**Primary**: GitHub Pages (Custom Domain: uuid.stomx.net)
 - GitHub Actions 비활성화 상태 (billing issue)
 - 수동 배포: `npm run deploy` 사용
+
+**Alternative**: Cloudflare Pages
+- See `docs/CLOUDFLARE_PAGES.md` for complete setup guide
+- Benefits: Unlimited bandwidth, global CDN, automatic previews on PR
+- Recommended for future migration due to GitHub Pages limitations
+
+### Build Verification
+
+UUID Generator includes comprehensive build verification to ensure all pages are generated correctly.
+
+**Script**: `./scripts/verify-build.sh`
+
+**Verification Checks** (44 total):
+1. **Directory Structure**: `/out`, `/_next`, `/generate`, `/ko` directories
+2. **English Pages**: 7 pages (index, v7, v4, v1, validate, parse, 404)
+3. **Korean Pages**: 6 pages in `/ko/*`
+4. **Static Assets**: sitemap.xml, robots.txt, favicon.ico, OG image
+5. **HTML Attributes**: `lang` attributes (`en`, `ko`)
+6. **Canonical URLs**: Self-referencing canonical tags
+7. **Hreflang Tags**: Multilingual alternate links (en, ko, x-default)
+8. **Sitemap Content**: All 14 pages listed with correct URLs
+9. **Meta Tags**: og:locale and description tags
+10. **Build Artifacts**: CSS/JS chunks generated
+
+**Usage**:
+```bash
+npm run build
+./scripts/verify-build.sh  # Validates build output (44 checks)
+```
+
+This script should be run before deployment to catch build issues early.
 
 ## Static Assets
 
