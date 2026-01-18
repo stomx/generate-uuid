@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { UuidValidator } from '../UuidValidator';
+import { __resetLocalStorageStores } from '@/hooks/useLocalStorage';
 
 // localStorage 모킹
 const localStorageMock = (() => {
@@ -23,16 +24,18 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// crypto.randomUUID 모킹
+// crypto.randomUUID 모킹 - 고유 ID 생성을 위한 카운터 사용
+let uuidCounter = 0;
 vi.stubGlobal('crypto', {
   ...crypto,
-  randomUUID: vi.fn(() => 'mock-uuid-id'),
+  randomUUID: vi.fn(() => `mock-uuid-id-${++uuidCounter}`),
 });
 
 describe('UuidValidator', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllMocks();
+    __resetLocalStorageStores();
   });
   it('입력 필드가 렌더링되어야 함', () => {
     render(<UuidValidator />);
@@ -156,6 +159,7 @@ describe('UuidValidator 히스토리', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllMocks();
+    __resetLocalStorageStores();
   });
 
   it('검증 후 히스토리에 추가되어야 함', async () => {
@@ -181,8 +185,10 @@ describe('UuidValidator 히스토리', () => {
   it('히스토리 카운트가 표시되어야 함', async () => {
     render(<UuidValidator />);
 
-    // 초기 상태 - 빈 히스토리
-    expect(screen.getByText('[0]')).toBeInTheDocument();
+    // 초기 상태 - 빈 히스토리 (useSyncExternalStore 초기화 대기)
+    await waitFor(() => {
+      expect(screen.getByText('[0]')).toBeInTheDocument();
+    });
 
     const input = screen.getByTestId('uuid-input');
     fireEvent.change(input, {

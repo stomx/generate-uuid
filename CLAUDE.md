@@ -8,6 +8,104 @@ UUID Generator - 온라인 UUID 생성/검증/파싱 도구 (uuid.stomx.net)
 - Next.js 14 + TypeScript + Tailwind CSS
 - Static Export로 GitHub Pages 배포
 - RFC 9562 준수 UUID v1, v4, v7 지원
+- 다국어 지원 (English, 한국어)
+
+## Multilingual Support (i18n)
+
+이 프로젝트는 영어(en)와 한국어(ko) 두 언어를 지원하며, SEO 최적화된 다국어 구조를 가지고 있습니다.
+
+### 디렉토리 구조
+```
+app/
+├── (main)/          # 영어 페이지 (기본)
+│   ├── layout.tsx   # lang="en", locale="en_US"
+│   ├── page.tsx     # / → /generate/v7 리다이렉트
+│   ├── not-found.tsx
+│   ├── generate/
+│   ├── validate/
+│   └── parse/
+└── ko/              # 한국어 페이지
+    ├── layout.tsx   # lang="ko", locale="ko_KR"
+    ├── page.tsx     # /ko → /ko/generate/v7 리다이렉트
+    ├── not-found.tsx
+    ├── generate/
+    ├── validate/
+    └── parse/
+```
+
+### URL 구조
+- 영어(기본): `/generate/v7`, `/validate`, `/parse`
+- 한국어: `/ko/generate/v7`, `/ko/validate`, `/ko/parse`
+- **Trailing slash**: 모든 URL은 `/`로 종료 (일관성)
+
+### SEO 최적화
+
+#### HTML lang 속성
+- 영어 페이지: `<html lang="en">`
+- 한국어 페이지: `<html lang="ko">`
+
+#### Canonical URL
+각 페이지는 자기 참조 canonical을 사용:
+```html
+<!-- 영어 -->
+<link rel="canonical" href="https://uuid.stomx.net/generate/v7/" />
+
+<!-- 한국어 -->
+<link rel="canonical" href="https://uuid.stomx.net/ko/generate/v7/" />
+```
+
+#### hreflang 태그
+모든 페이지에 언어별 대체 버전 표시:
+```html
+<link rel="alternate" hreflang="en" href="https://uuid.stomx.net/[path]/" />
+<link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/[path]/" />
+<link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/[path]/" />
+```
+
+#### Sitemap
+`public/sitemap.xml`에 모든 언어 페이지 포함:
+- 영어 페이지 7개
+- 한국어 페이지 7개
+- 총 14개 URL
+
+### 언어 전환 기능
+
+**LangLayoutClient 컴포넌트** (`components/common/LangLayoutClient.tsx`):
+- 헤더에 언어 토글 버튼 (EN ↔ KO)
+- 현재 경로 유지하며 언어만 변경
+- aria-label로 접근성 확보
+- `router.push()`로 클라이언트 사이드 네비게이션
+
+```typescript
+const handleLanguageToggle = () => {
+  const currentPath = pathname.replace(/^\/ko/, '');
+  const newPath = lang === 'ko' ? currentPath : `/ko${currentPath}`;
+  router.push(newPath);
+};
+```
+
+### E2E 테스트
+`e2e/language-toggle.spec.ts` (10개 테스트):
+- EN ↔ KO 전환 및 URL 변경 확인
+- 경로 유지 검증 (parse, v1, v4 페이지)
+- aria-label 접근성 확인
+- 브라우저 네비게이션 (뒤로/앞으로) 언어 유지
+- 루트 리다이렉트 확인 (/, /ko)
+- 새로고침 후 언어 상태 유지
+
+### 404 페이지
+언어별 404 페이지로 사용자 경험 개선:
+- `app/(main)/not-found.tsx` - 영어
+- `app/ko/not-found.tsx` - 한국어
+- Terminal Noir 테마 일관성
+- 빠른 네비게이션 링크 제공
+
+### Google Search Console
+`docs/GSC_CHECKLIST.md` 참조:
+- Sitemap 제출 및 색인 생성 확인
+- hreflang 검증
+- 언어별 트래픽 분석
+- 국제 타겟팅 설정
 
 ## Commands
 
@@ -21,8 +119,8 @@ npm run deploy       # Build + gh-pages deploy (GitHub Actions 비활성화 상�
 
 # Test
 npm run test         # Vitest watch mode
-npm run test:run     # Single run (304 unit tests)
-npm run test:e2e     # Playwright E2E tests (45 tests × 2 projects)
+npm run test:run     # Single run (305 unit tests)
+npm run test:e2e     # Playwright E2E tests (86 tests × 2 projects = 172 total)
 npm run test:e2e:ui  # Playwright UI mode
 
 # Lint
@@ -156,6 +254,8 @@ test.beforeEach(async ({ page }, testInfo) => {
 - `generator.spec.ts` - UUID 생성, 복사, 키보드 단축키
 - `validator.spec.ts` - UUID 검증 및 히스토리
 - `parser.spec.ts` - UUID 파싱 및 히스토리
+- `routing.spec.ts` - URL 라우팅, 탭/버전 전환, 브라우저 네비게이션
+- `language-toggle.spec.ts` - 언어 전환 기능 (EN ↔ KO)
 - `accessibility.spec.ts` - WCAG 2.0 A/AA (@axe-core/playwright)
 - `mobile.spec.ts` - 모바일 레이아웃 및 터치 인터랙션
 
@@ -198,9 +298,41 @@ beforeAll(() => {
 
 ## Deployment
 
-GitHub Pages (Custom Domain: uuid.stomx.net)
+**Primary**: GitHub Pages (Custom Domain: uuid.stomx.net)
 - GitHub Actions 비활성화 상태 (billing issue)
 - 수동 배포: `npm run deploy` 사용
+
+**Alternative**: Cloudflare Pages
+- See `docs/CLOUDFLARE_PAGES.md` for complete setup guide
+- Benefits: Unlimited bandwidth, global CDN, automatic previews on PR
+- Recommended for future migration due to GitHub Pages limitations
+
+### Build Verification
+
+UUID Generator includes comprehensive build verification to ensure all pages are generated correctly.
+
+**Script**: `./scripts/verify-build.sh`
+
+**Verification Checks** (53 total):
+1. **Directory Structure**: `/out`, `/_next`, `/generate`, `/ko` directories
+2. **English Pages**: 7 pages (index, v7, v4, v1, validate, parse, 404)
+3. **Korean Pages**: 7 pages in `/ko/*` (index, v7, v4, v1, validate, parse, 404)
+4. **Static Assets**: sitemap.xml, robots.txt, favicon.ico, OG image
+5. **HTML Attributes**: `lang` attributes (`en`, `ko`) including 404 pages
+6. **404 Page Content**: Multilingual 404 pages with correct text, ASCII art, navigation links
+7. **Canonical URLs**: Self-referencing canonical tags
+8. **Hreflang Tags**: Multilingual alternate links (en, ko, x-default)
+9. **Sitemap Content**: All 14 pages listed with correct URLs
+10. **Meta Tags**: og:locale and description tags
+11. **Build Artifacts**: CSS/JS chunks generated
+
+**Usage**:
+```bash
+npm run build
+./scripts/verify-build.sh  # Validates build output (44 checks)
+```
+
+This script should be run before deployment to catch build issues early.
 
 ## Static Assets
 

@@ -1,8 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind CSS v4 Theme Configuration */
+@theme {
+  /* Breakpoints */
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Font Families */
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Colors - mapped to CSS Variables */
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-hover: var(--bg-hover);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-accent-mint: var(--accent-mint);
+  --color-accent-mint-dim: var(--accent-mint-dim);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-red: var(--accent-red);
+  --color-accent-cyan: var(--accent-cyan);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-dashed: var(--border-dashed);
+
+  /* Box Shadows */
+  --shadow-glow-mint: var(--glow-mint);
+  --shadow-glow-amber: var(--glow-amber);
+
+  /* Animations */
+  --animate-fade-in: fadeInUp 0.4s ease-out forwards;
+  --animate-blink: blink 1s step-end infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-glitch: glitch 0.3s ease-in-out;
+}
 
 :root {
   /* Terminal Noir Palette - Dark (default) */
@@ -221,22 +263,20 @@ body {
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 
-/* Utility classes */
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Utility classes - Tailwind v4 @utility syntax */
+@utility text-balance {
+  text-wrap: balance;
+}
 
-  .border-dashed-custom {
-    border-style: dashed;
-    border-color: var(--border-dashed);
-  }
+@utility border-dashed-custom {
+  border-style: dashed;
+  border-color: var(--border-dashed);
+}
 
-  .glow-mint {
-    box-shadow: var(--glow-mint);
-  }
+@utility glow-mint {
+  box-shadow: var(--glow-mint);
+}
 
-  .glow-amber {
-    box-shadow: var(--glow-amber);
-  }
+@utility glow-amber {
+  box-shadow: var(--glow-amber);
 }

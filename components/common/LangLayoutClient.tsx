@@ -1,113 +1,95 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, ReactNode } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui';
 import { TabNav, ThemeToggle, ErrorBoundary } from '@/components/common';
 import type { TabId } from '@/components/common';
-import { UuidGenerator } from '@/components/generator';
 
-// 코드 스플리팅: Validator와 Parser는 탭 전환 시 동적 로딩
-const UuidValidator = dynamic(
-  () => import('@/components/validator').then((mod) => mod.UuidValidator),
-  {
-    loading: () => (
-      <div className="flex items-center justify-center h-32 text-text-muted font-mono text-sm">
-        <span className="animate-pulse">Loading...</span>
-      </div>
-    ),
-  }
-);
+function getActiveTab(pathname: string): TabId {
+  if (pathname.includes('/validate')) return 'validator';
+  if (pathname.includes('/parse')) return 'parser';
+  return 'generator';
+}
 
-const UuidParser = dynamic(
-  () => import('@/components/parser').then((mod) => mod.UuidParser),
-  {
-    loading: () => (
-      <div className="flex items-center justify-center h-32 text-text-muted font-mono text-sm">
-        <span className="animate-pulse">Loading...</span>
-      </div>
-    ),
-  }
-);
+export function LangLayoutClient({ children, lang }: { children: ReactNode; lang: string }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const activeTab = getActiveTab(pathname);
+  const langPrefix = lang === 'ko' ? '/ko' : '';
 
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<TabId>('generator');
-  const [mounted, setMounted] = useState(false);
+  // 언어 변경 핸들러
+  const handleLanguageToggle = () => {
+    const currentPath = pathname.replace(/^\/ko/, ''); // /ko 제거
+    const newPath = lang === 'ko' ? currentPath : `/ko${currentPath}`;
+    router.push(newPath);
+  };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // 키보드 단축키 (Option/Alt + 숫자)
+  // 키보드 단축키 (Option/Alt + 숫자) - 입력 필드에서도 동작
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // 입력 필드에서는 무시
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-        return;
-      }
-
       // Option(Mac)/Alt(Windows) + 숫자로 탭 전환
       if (e.altKey) {
         if (e.key === '1') {
           e.preventDefault();
-          setActiveTab('generator');
+          router.push(`${langPrefix}/generate/v7`);
         }
         if (e.key === '2') {
           e.preventDefault();
-          setActiveTab('validator');
+          router.push(`${langPrefix}/validate`);
         }
         if (e.key === '3') {
           e.preventDefault();
-          setActiveTab('parser');
+          router.push(`${langPrefix}/parse`);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [router, langPrefix]);
 
   return (
     <main className="h-dvh bg-bg-deep flex flex-col overflow-hidden">
-      {/* 뷰포트 고정 높이 레이아웃 */}
-
       <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
         <div className="max-w-2xl mx-auto w-full flex flex-col h-full">
           {/* 헤더 - 고정 높이 */}
-          <header className={`
-            flex items-center justify-between pb-4 shrink-0
-            ${mounted ? 'animate-fade-in' : 'opacity-0'}
-          `}>
+          <header className="flex items-center justify-between pb-4 shrink-0 animate-fade-in">
             <div className="flex items-center gap-4">
-              {/* 로고/타이틀 */}
-              <h1 className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
-                <span className="text-accent-mint">UUID</span>
-                <span className="text-text-primary">::</span>
-                <span className="text-text-secondary">GEN</span>
-              </h1>
-
-              {/* 버전 배지 */}
+              <Link href={`${langPrefix}/generate/v7`}>
+                <h1 className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
+                  <span className="text-accent-mint">UUID</span>
+                  <span className="text-text-primary">::</span>
+                  <span className="text-text-secondary">GEN</span>
+                </h1>
+              </Link>
               <span className="hidden sm:inline-flex px-2 py-0.5 text-xs font-mono uppercase border border-border-subtle text-text-muted">
                 v1.0.0
               </span>
             </div>
 
             <div className="flex items-center gap-3">
-              {/* 상태 표시 */}
               <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-text-muted">
                 <span className="w-2 h-2 rounded-full bg-accent-mint animate-pulse" />
                 <span>ONLINE</span>
               </div>
-
+              <button
+                onClick={handleLanguageToggle}
+                className="px-2 py-1 text-xs font-mono border border-border-subtle text-text-muted hover:text-accent-mint hover:border-accent-mint transition-colors"
+                aria-label={lang === 'ko' ? 'Switch to English' : '한국어로 전환'}
+              >
+                {lang === 'ko' ? 'EN' : 'KO'}
+              </button>
               <ThemeToggle />
             </div>
           </header>
 
-          {/* 메인 컨테이너 - 뷰포트에 맞춰 확장 */}
-          <div className={`
-            flex-1 flex flex-col min-h-0
-            ${mounted ? 'animate-fade-in' : 'opacity-0'}
-          `} style={{ animationDelay: '100ms' }}>
+          {/* 메인 컨테이너 */}
+          <div
+            className="flex-1 flex flex-col min-h-0 animate-fade-in"
+            style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}
+          >
             {/* 터미널 스타일 헤더 */}
             <div className="flex items-center justify-between px-3 sm:px-4 py-1.5 sm:py-2 bg-bg-elevated border border-border-subtle border-b-0 shrink-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
@@ -120,14 +102,12 @@ export default function Home() {
               </span>
             </div>
 
-            {/* 메인 카드 - flex-1로 확장 */}
+            {/* 메인 카드 */}
             <Card className="p-3 sm:p-6 border-t-0 flex-1 flex flex-col min-h-0">
-              {/* 탭 네비게이션 */}
               <nav className="mb-3 sm:mb-4 shrink-0">
-                <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+                <TabNav activeTab={activeTab} lang={lang} />
               </nav>
 
-              {/* 탭 패널 - 내부 스크롤 */}
               <ErrorBoundary>
                 <div
                   role="tabpanel"
@@ -135,27 +115,30 @@ export default function Home() {
                   aria-labelledby={`tab-${activeTab}`}
                   className="flex-1 overflow-y-auto min-h-0 p-1 -m-1"
                 >
-                  {activeTab === 'generator' && <UuidGenerator />}
-                  {activeTab === 'validator' && <UuidValidator />}
-                  {activeTab === 'parser' && <UuidParser />}
+                  {children}
                 </div>
               </ErrorBoundary>
             </Card>
           </div>
 
-
-          {/* 푸터 - 고정 높이 */}
-          <footer className={`
-            pt-3 sm:pt-4 text-center shrink-0
-            ${mounted ? 'animate-fade-in' : 'opacity-0'}
-          `} style={{ animationDelay: '200ms' }}>
+          {/* 푸터 */}
+          <footer
+            className="pt-3 sm:pt-4 text-center shrink-0 animate-fade-in"
+            style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}
+          >
             <div className="flex items-center justify-center gap-2 sm:gap-4 text-text-muted font-mono text-[10px] sm:text-xs">
               <span className="flex items-center gap-1.5 sm:gap-2">
-                <span className="text-accent-cyan">v1</span>
+                <Link href={`${langPrefix}/generate/v1`} className="text-accent-cyan hover:underline">
+                  v1
+                </Link>
                 <span className="text-text-muted/50">/</span>
-                <span className="text-accent-amber">v4</span>
+                <Link href={`${langPrefix}/generate/v4`} className="text-accent-amber hover:underline">
+                  v4
+                </Link>
                 <span className="text-text-muted/50">/</span>
-                <span className="text-accent-mint">v7</span>
+                <Link href={`${langPrefix}/generate/v7`} className="text-accent-mint hover:underline">
+                  v7
+                </Link>
               </span>
               <span className="text-text-muted/30">|</span>
               <a
@@ -168,18 +151,23 @@ export default function Home() {
               </a>
             </div>
 
-            {/* 키보드 단축키 힌트 - 데스크톱만 */}
             <div className="hidden sm:flex mt-2 items-center justify-center gap-4 text-text-muted/50 font-mono text-[10px]">
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt/⌥+1</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">
+                  Alt/⌥+1
+                </kbd>
                 <span className="ml-1">GEN</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt/⌥+2</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">
+                  Alt/⌥+2
+                </kbd>
                 <span className="ml-1">VAL</span>
               </span>
               <span>
-                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">Alt/⌥+3</kbd>
+                <kbd className="px-1.5 py-0.5 border border-border-subtle bg-bg-surface">
+                  Alt/⌥+3
+                </kbd>
                 <span className="ml-1">PARSE</span>
               </span>
             </div>

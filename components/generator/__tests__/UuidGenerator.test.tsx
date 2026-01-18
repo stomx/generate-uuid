@@ -1,6 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { UuidGenerator } from '../UuidGenerator';
+import { __resetLocalStorageStores } from '@/hooks/useLocalStorage';
+
+// Mock next/navigation
+const mockPush = vi.fn();
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => '/generate/v7',
+}));
 
 // Mock clipboard API
 const mockClipboard = {
@@ -26,6 +38,7 @@ describe('UuidGenerator', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
+    __resetLocalStorageStores();
   });
 
   it('마운트 시 UUID를 생성해야 함', async () => {

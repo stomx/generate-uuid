@@ -19,12 +19,19 @@ const DEFAULT_OPTIONS: UuidOptions = {
   count: 1,
 };
 
+interface UseUuidGeneratorParams {
+  initialVersion?: SupportedUuidVersion;
+}
+
 /**
  * UUID 생성기 상태 관리 훅
  */
-export function useUuidGenerator(): UseUuidGeneratorReturn {
+export function useUuidGenerator(
+  params: UseUuidGeneratorParams = {}
+): UseUuidGeneratorReturn {
+  const { initialVersion = 'v7' } = params;
   const [uuids, setUuids] = useState<string[]>([]);
-  const [version, setVersion] = useState<SupportedUuidVersion>('v7');
+  const [version, setVersion] = useState<SupportedUuidVersion>(initialVersion);
   const [options, setOptionsState] = useState<UuidOptions>(DEFAULT_OPTIONS);
 
   // UUID 생성
