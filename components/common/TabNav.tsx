@@ -1,21 +1,22 @@
 'use client';
 
 import Link from 'next/link';
+import { getTranslations } from '@/lib/i18n/translations';
 
 export type TabId = 'generator' | 'validator' | 'parser';
 
 interface Tab {
   id: TabId;
-  label: string;
-  shortLabel: string;
+  labelKey: 'generate' | 'validate' | 'parse';
+  shortLabelKey: 'generateShort' | 'validateShort' | 'parseShort';
   shortcut: string;
   path: string;
 }
 
 const TABS: Tab[] = [
-  { id: 'generator', label: 'Generate', shortLabel: 'GEN', shortcut: '1', path: '/generate/v7' },
-  { id: 'validator', label: 'Validate', shortLabel: 'VAL', shortcut: '2', path: '/validate' },
-  { id: 'parser', label: 'Parse', shortLabel: 'PARSE', shortcut: '3', path: '/parse' },
+  { id: 'generator', labelKey: 'generate', shortLabelKey: 'generateShort', shortcut: '1', path: '/generate/v7' },
+  { id: 'validator', labelKey: 'validate', shortLabelKey: 'validateShort', shortcut: '2', path: '/validate' },
+  { id: 'parser', labelKey: 'parse', shortLabelKey: 'parseShort', shortcut: '3', path: '/parse' },
 ];
 
 interface TabNavProps {
@@ -25,6 +26,7 @@ interface TabNavProps {
 
 export function TabNav({ activeTab, lang = 'en' }: TabNavProps) {
   const langPrefix = lang === 'ko' ? '/ko' : '';
+  const t = getTranslations(lang as 'en' | 'ko');
 
   return (
     <div role="tablist" aria-label="UUID 도구 선택" className="flex border-b border-border-subtle -mx-1 px-1">
@@ -52,8 +54,8 @@ export function TabNav({ activeTab, lang = 'en' }: TabNavProps) {
         >
           {/* 모바일: 단축키만, 데스크톱: 단축키 + 풀 라벨 */}
           <span className="hidden sm:inline text-text-muted text-xs mr-2">[{tab.shortcut}]</span>
-          <span className="sm:hidden">{tab.shortLabel}</span>
-          <span className="hidden sm:inline">{tab.label}</span>
+          <span className="sm:hidden">{t.nav[tab.shortLabelKey]}</span>
+          <span className="hidden sm:inline">{t.nav[tab.labelKey]}</span>
         </Link>
       ))}
     </div>

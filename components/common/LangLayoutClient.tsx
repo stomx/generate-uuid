@@ -4,8 +4,9 @@ import { useEffect, ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui';
-import { TabNav, ThemeToggle, ErrorBoundary } from '@/components/common';
+import { TabNav, ThemeToggle, ErrorBoundary, LanguageSelect } from '@/components/common';
 import type { TabId } from '@/components/common';
+import { getTranslations } from '@/lib/i18n/translations';
 
 function getActiveTab(pathname: string): TabId {
   if (pathname.includes('/validate')) return 'validator';
@@ -18,13 +19,7 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
   const router = useRouter();
   const activeTab = getActiveTab(pathname);
   const langPrefix = lang === 'ko' ? '/ko' : '';
-
-  // 언어 변경 핸들러
-  const handleLanguageToggle = () => {
-    const currentPath = pathname.replace(/^\/ko/, ''); // /ko 제거
-    const newPath = lang === 'ko' ? currentPath : `/ko${currentPath}`;
-    router.push(newPath);
-  };
+  const t = getTranslations(lang as 'en' | 'ko');
 
   // 키보드 단축키 (Option/Alt + 숫자) - 입력 필드에서도 동작
   useEffect(() => {
@@ -72,15 +67,9 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-text-muted">
                 <span className="w-2 h-2 rounded-full bg-accent-mint animate-pulse" />
-                <span>ONLINE</span>
+                <span>{t.status.online}</span>
               </div>
-              <button
-                onClick={handleLanguageToggle}
-                className="px-2 py-1 text-xs font-mono border border-border-subtle text-text-muted hover:text-accent-mint hover:border-accent-mint transition-colors"
-                aria-label={lang === 'ko' ? 'Switch to English' : '한국어로 전환'}
-              >
-                {lang === 'ko' ? 'EN' : 'KO'}
-              </button>
+              <LanguageSelect lang={lang} />
               <ThemeToggle />
             </div>
           </header>
