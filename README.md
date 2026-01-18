@@ -44,7 +44,7 @@ npm run test:e2e    # E2E tests
 | `npm run build` | Production build (static export to /out) |
 | `npm run test` | Vitest watch mode |
 | `npm run test:run` | Single test run (305 unit tests) |
-| `npm run test:e2e` | Playwright E2E tests (76 tests × 2 projects) |
+| `npm run test:e2e` | Playwright E2E tests (86 tests × 2 projects) |
 | `npm run lint` | ESLint |
 | `npm run deploy` | Build + GitHub Pages deploy |
 
