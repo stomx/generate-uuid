@@ -40,7 +40,7 @@ function AnalyticsScriptsInner() {
     return null;
   }
 
-  const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+  const adsenseClientId = 'ca-pub-4723857054709306';
 
   return (
     <>
