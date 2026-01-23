@@ -71,6 +71,15 @@ export interface Translations {
     copied: string;
     copyError: string;
   };
+
+  // Page titles (H1) for SEO
+  pageTitle: {
+    generatorV1: string;
+    generatorV4: string;
+    generatorV7: string;
+    validator: string;
+    parser: string;
+  };
 }
 
 export const translations: Record<Locale, Translations> = {
@@ -132,6 +141,13 @@ export const translations: Record<Locale, Translations> = {
       copied: 'Copied!',
       copyError: 'Copy failed',
     },
+    pageTitle: {
+      generatorV1: 'UUID v1 Generator - Timestamp Based',
+      generatorV4: 'UUID v4 Generator - Random',
+      generatorV7: 'UUID v7 Generator - Time-Ordered',
+      validator: 'UUID Validator - Format & Version Check',
+      parser: 'UUID Parser - Timestamp Extraction',
+    },
   },
   ko: {
     nav: {
@@ -190,6 +206,13 @@ export const translations: Record<Locale, Translations> = {
       online: '온라인',
       copied: '복사됨!',
       copyError: '복사 실패',
+    },
+    pageTitle: {
+      generatorV1: 'UUID v1 생성기 - 타임스탬프 기반',
+      generatorV4: 'UUID v4 생성기 - 랜덤',
+      generatorV7: 'UUID v7 생성기 - 시간 순서',
+      validator: 'UUID 검증기 - 형식 및 버전 확인',
+      parser: 'UUID 파서 - 타임스탬프 추출',
     },
   },
 };

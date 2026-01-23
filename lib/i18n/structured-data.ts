@@ -1,6 +1,70 @@
 import type { Locale } from './index';
 
-export function getStructuredData(locale: Locale) {
+interface BreadcrumbItem {
+  name: string;
+  item: string;
+}
+
+function getBreadcrumbItems(locale: Locale, path: string): BreadcrumbItem[] {
+  const baseUrl = 'https://uuid.stomx.net';
+  const localePrefix = locale === 'ko' ? '/ko' : '';
+
+  const home: BreadcrumbItem = {
+    name: locale === 'en' ? 'Home' : '홈',
+    item: `${baseUrl}${localePrefix}/`,
+  };
+
+  // Normalize path
+  const normalizedPath = path.replace(/^\/ko/, '').replace(/\/$/, '') || '/';
+
+  if (normalizedPath === '/' || normalizedPath === '') {
+    return [home];
+  }
+
+  if (normalizedPath.startsWith('/generate')) {
+    const version = normalizedPath.split('/')[2] || 'v7';
+    const versionNames: Record<string, Record<Locale, string>> = {
+      v1: { en: 'UUID v1 Generator', ko: 'UUID v1 생성기' },
+      v4: { en: 'UUID v4 Generator', ko: 'UUID v4 생성기' },
+      v7: { en: 'UUID v7 Generator', ko: 'UUID v7 생성기' },
+    };
+    return [
+      home,
+      {
+        name: locale === 'en' ? 'Generate' : '생성',
+        item: `${baseUrl}${localePrefix}/generate/v7/`,
+      },
+      {
+        name: versionNames[version]?.[locale] || versionNames.v7[locale],
+        item: `${baseUrl}${localePrefix}/generate/${version}/`,
+      },
+    ];
+  }
+
+  if (normalizedPath === '/validate') {
+    return [
+      home,
+      {
+        name: locale === 'en' ? 'UUID Validator' : 'UUID 검증기',
+        item: `${baseUrl}${localePrefix}/validate/`,
+      },
+    ];
+  }
+
+  if (normalizedPath === '/parse') {
+    return [
+      home,
+      {
+        name: locale === 'en' ? 'UUID Parser' : 'UUID 파서',
+        item: `${baseUrl}${localePrefix}/parse/`,
+      },
+    ];
+  }
+
+  return [home];
+}
+
+export function getStructuredData(locale: Locale, path: string = '/') {
   const baseUrl = 'https://uuid.stomx.net';
   const localePrefix = locale === 'ko' ? '/ko' : '';
 
@@ -53,11 +117,6 @@ export function getStructuredData(locale: Locale) {
           ],
     screenshot: `${baseUrl}/og-image.jpg`,
     softwareVersion: '1.0.0',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '5',
-      ratingCount: '1',
-    },
     author: {
       '@type': 'Organization',
       name: 'UUID Generator',
@@ -66,35 +125,16 @@ export function getStructuredData(locale: Locale) {
     inLanguage: locale === 'en' ? 'en-US' : 'ko-KR',
   };
 
+  const breadcrumbItems = getBreadcrumbItems(locale, path);
   const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: locale === 'en' ? 'Home' : '홈',
-        item: `${baseUrl}${localePrefix}`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: locale === 'en' ? 'UUID Generator' : 'UUID 생성기',
-        item: `${baseUrl}${localePrefix}/generate/v7`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: locale === 'en' ? 'UUID Validator' : 'UUID 검증기',
-        item: `${baseUrl}${localePrefix}/validate`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 4,
-        name: locale === 'en' ? 'UUID Parser' : 'UUID 파서',
-        item: `${baseUrl}${localePrefix}/parse`,
-      },
-    ],
+    itemListElement: breadcrumbItems.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.item,
+    })),
   };
 
   return { structuredData, breadcrumb };

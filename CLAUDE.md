@@ -5,107 +5,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 UUID Generator - 온라인 UUID 생성/검증/파싱 도구 (uuid.stomx.net)
-- Next.js 14 + TypeScript + Tailwind CSS
-- Static Export로 GitHub Pages 배포
+- Next.js 16 + TypeScript + Tailwind CSS
+- Static Export로 Cloudflare Pages 배포
 - RFC 9562 준수 UUID v1, v4, v7 지원
 - 다국어 지원 (English, 한국어)
 
 ## Multilingual Support (i18n)
 
-이 프로젝트는 영어(en)와 한국어(ko) 두 언어를 지원하며, SEO 최적화된 다국어 구조를 가지고 있습니다.
-
-### 디렉토리 구조
-```
-app/
-├── (main)/          # 영어 페이지 (기본)
-│   ├── layout.tsx   # lang="en", locale="en_US"
-│   ├── page.tsx     # / → /generate/v7 리다이렉트
-│   ├── not-found.tsx
-│   ├── generate/
-│   ├── validate/
-│   └── parse/
-└── ko/              # 한국어 페이지
-    ├── layout.tsx   # lang="ko", locale="ko_KR"
-    ├── page.tsx     # /ko → /ko/generate/v7 리다이렉트
-    ├── not-found.tsx
-    ├── generate/
-    ├── validate/
-    └── parse/
-```
+영어(en)와 한국어(ko) 두 언어를 지원합니다.
 
 ### URL 구조
 - 영어(기본): `/generate/v7`, `/validate`, `/parse`
 - 한국어: `/ko/generate/v7`, `/ko/validate`, `/ko/parse`
-- **Trailing slash**: 모든 URL은 `/`로 종료 (일관성)
+- 모든 URL은 trailing slash로 종료
 
-### SEO 최적화
+### 주요 파일
+- `app/(main)/` - 영어 페이지 (lang="en")
+- `app/ko/` - 한국어 페이지 (lang="ko")
+- `lib/i18n/` - 번역 및 메타데이터
+- `components/common/LangLayoutClient.tsx` - 언어 전환 로직
 
-#### HTML lang 속성
-- 영어 페이지: `<html lang="en">`
-- 한국어 페이지: `<html lang="ko">`
-
-#### Canonical URL
-각 페이지는 자기 참조 canonical을 사용:
-```html
-<!-- 영어 -->
-<link rel="canonical" href="https://uuid.stomx.net/generate/v7/" />
-
-<!-- 한국어 -->
-<link rel="canonical" href="https://uuid.stomx.net/ko/generate/v7/" />
-```
-
-#### hreflang 태그
-모든 페이지에 언어별 대체 버전 표시:
-```html
-<link rel="alternate" hreflang="en" href="https://uuid.stomx.net/[path]/" />
-<link rel="alternate" hreflang="ko" href="https://uuid.stomx.net/ko/[path]/" />
-<link rel="alternate" hreflang="x-default" href="https://uuid.stomx.net/[path]/" />
-```
-
-#### Sitemap
-`public/sitemap.xml`에 모든 언어 페이지 포함:
-- 영어 페이지 7개
-- 한국어 페이지 7개
-- 총 14개 URL
-
-### 언어 전환 기능
-
-**LangLayoutClient 컴포넌트** (`components/common/LangLayoutClient.tsx`):
-- 헤더에 언어 토글 버튼 (EN ↔ KO)
-- 현재 경로 유지하며 언어만 변경
-- aria-label로 접근성 확보
-- `router.push()`로 클라이언트 사이드 네비게이션
-
-```typescript
-const handleLanguageToggle = () => {
-  const currentPath = pathname.replace(/^\/ko/, '');
-  const newPath = lang === 'ko' ? currentPath : `/ko${currentPath}`;
-  router.push(newPath);
-};
-```
-
-### E2E 테스트
-`e2e/language-toggle.spec.ts` (10개 테스트):
-- EN ↔ KO 전환 및 URL 변경 확인
-- 경로 유지 검증 (parse, v1, v4 페이지)
-- aria-label 접근성 확인
-- 브라우저 네비게이션 (뒤로/앞으로) 언어 유지
-- 루트 리다이렉트 확인 (/, /ko)
-- 새로고침 후 언어 상태 유지
-
-### 404 페이지
-언어별 404 페이지로 사용자 경험 개선:
-- `app/(main)/not-found.tsx` - 영어
-- `app/ko/not-found.tsx` - 한국어
-- Terminal Noir 테마 일관성
-- 빠른 네비게이션 링크 제공
-
-### Google Search Console
-`docs/GSC_CHECKLIST.md` 참조:
-- Sitemap 제출 및 색인 생성 확인
-- hreflang 검증
-- 언어별 트래픽 분석
-- 국제 타겟팅 설정
+### SEO
+- 페이지별 고유 H1 (`sr-only` 클래스로 숨김, SEO용)
+- 자기 참조 canonical + hreflang 태그
+- 페이지별 동적 Breadcrumb 스키마
+- `public/sitemap.xml` - 12개 URL (영어 6개 + 한국어 6개)
 
 ## Commands
 
@@ -113,13 +37,12 @@ const handleLanguageToggle = () => {
 # Development
 npm run dev          # http://localhost:3000
 
-# Build & Deploy
-npm run build        # Static export to /out
-npm run deploy       # Build + gh-pages deploy (GitHub Actions 비활성화 상태)
+# Build
+npm run build        # Static export to /out (Cloudflare Pages 자동 배포)
 
 # Test
 npm run test         # Vitest watch mode
-npm run test:run     # Single run (305 unit tests)
+npm run test:run     # Single run
 npm run test:e2e     # Playwright E2E tests (86 tests × 2 projects = 172 total)
 npm run test:e2e:ui  # Playwright UI mode
 
@@ -250,104 +173,37 @@ test.beforeEach(async ({ page }, testInfo) => {
 });
 ```
 
-**테스트 파일**:
-- `generator.spec.ts` - UUID 생성, 복사, 키보드 단축키
-- `validator.spec.ts` - UUID 검증 및 히스토리
-- `parser.spec.ts` - UUID 파싱 및 히스토리
-- `routing.spec.ts` - URL 라우팅, 탭/버전 전환, 브라우저 네비게이션
-- `language-toggle.spec.ts` - 언어 전환 기능 (EN ↔ KO)
-- `accessibility.spec.ts` - WCAG 2.0 A/AA (@axe-core/playwright)
-- `mobile.spec.ts` - 모바일 레이아웃 및 터치 인터랙션
+**테스트 파일** (`e2e/`):
+`generator`, `validator`, `parser`, `routing`, `language-toggle`, `accessibility`, `mobile`
 
 ### 테스트 모킹 패턴
 
-**localStorage 모킹** (히스토리 기능 테스트):
-```typescript
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-    removeItem: vi.fn((key: string) => { delete store[key]; }),
-    clear: vi.fn(() => { store = {}; }),
-  };
-})();
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-
-// beforeEach에서 초기화
-beforeEach(() => {
-  localStorageMock.clear();
-  vi.clearAllMocks();
-});
-```
-
-**crypto.randomUUID 모킹** (ID 생성 테스트):
-```typescript
-vi.stubGlobal('crypto', {
-  ...crypto,
-  randomUUID: vi.fn(() => 'mock-uuid-id'),
-});
-```
-
-**Radix UI 테스트** (Select 등):
-```typescript
-beforeAll(() => {
-  Element.prototype.scrollIntoView = vi.fn();
-});
-```
+- **localStorage**: 히스토리 기능 테스트 시 모킹 필요 (예: `components/validator/__tests__/`)
+- **crypto.randomUUID**: ID 생성 테스트 시 `vi.stubGlobal()` 사용
+- **Radix UI**: `Element.prototype.scrollIntoView` 모킹 필요
 
 ## Deployment
 
-**Primary**: GitHub Pages (Custom Domain: uuid.stomx.net)
-- GitHub Actions 비활성화 상태 (billing issue)
-- 수동 배포: `npm run deploy` 사용
-
-**Alternative**: Cloudflare Pages
-- See `docs/CLOUDFLARE_PAGES.md` for complete setup guide
+**Cloudflare Pages** (Custom Domain: uuid.stomx.net)
+- Git push 시 자동 배포
 - Benefits: Unlimited bandwidth, global CDN, automatic previews on PR
-- Recommended for future migration due to GitHub Pages limitations
+- See `docs/CLOUDFLARE_PAGES.md` for setup guide
 
 ### Build Verification
 
-UUID Generator includes comprehensive build verification to ensure all pages are generated correctly.
-
-**Script**: `./scripts/verify-build.sh`
-
-**Verification Checks** (53 total):
-1. **Directory Structure**: `/out`, `/_next`, `/generate`, `/ko` directories
-2. **English Pages**: 7 pages (index, v7, v4, v1, validate, parse, 404)
-3. **Korean Pages**: 7 pages in `/ko/*` (index, v7, v4, v1, validate, parse, 404)
-4. **Static Assets**: sitemap.xml, robots.txt, favicon.ico, OG image
-5. **HTML Attributes**: `lang` attributes (`en`, `ko`) including 404 pages
-6. **404 Page Content**: Multilingual 404 pages with correct text, ASCII art, navigation links
-7. **Canonical URLs**: Self-referencing canonical tags
-8. **Hreflang Tags**: Multilingual alternate links (en, ko, x-default)
-9. **Sitemap Content**: All 14 pages listed with correct URLs
-10. **Meta Tags**: og:locale and description tags
-11. **Build Artifacts**: CSS/JS chunks generated
-
-**Usage**:
 ```bash
 npm run build
-./scripts/verify-build.sh  # Validates build output (44 checks)
+./scripts/verify-build.sh  # 53개 검증 (페이지, SEO 태그, 정적 자산 등)
 ```
 
-This script should be run before deployment to catch build issues early.
+디렉토리 구조, HTML lang 속성, canonical/hreflang 태그, sitemap, 메타 태그 등을 검증합니다.
 
 ## Static Assets
 
-| 에셋 | 경로 | 용도 |
-|------|------|------|
-| Favicon | `app/favicon.ico` | 브라우저 탭 아이콘 |
-| App Icon | `app/icon.png` | PWA/일반 아이콘 (32x32) |
-| Apple Icon | `app/apple-icon.png` | iOS 홈화면 (180x180) |
-| OG Image | `public/og-image.jpg` | SNS 미리보기 (1200x630) |
+- `app/favicon.ico`, `app/icon.png`, `app/apple-icon.png` - Next.js 파일 기반 메타데이터
+- `public/og-image.jpg` - SNS 미리보기 (1200x630)
 
-**참고**: Next.js 14 파일 기반 메타데이터 규칙 사용. `app/` 디렉토리의 아이콘은 자동 감지됨.
+## Analytics
 
-## Analytics Integration
-
-- Google Analytics 4 (G-R1Y8SQSKY0)
-- Google Tag Manager (GTM-WWD73RTG)
-- Microsoft Clarity (v27j4cca2q)
-- Google AdSense (환경변수: NEXT_PUBLIC_ADSENSE_CLIENT_ID)
+Google Analytics 4, Google Tag Manager, Microsoft Clarity, Google AdSense 통합.
+설정: `components/common/AnalyticsScripts.tsx`

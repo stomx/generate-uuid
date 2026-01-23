@@ -14,12 +14,21 @@ function getActiveTab(pathname: string): TabId {
   return 'generator';
 }
 
+function getPageTitleKey(pathname: string): keyof ReturnType<typeof getTranslations>['pageTitle'] {
+  if (pathname.includes('/validate')) return 'validator';
+  if (pathname.includes('/parse')) return 'parser';
+  if (pathname.includes('/v1')) return 'generatorV1';
+  if (pathname.includes('/v4')) return 'generatorV4';
+  return 'generatorV7';
+}
+
 export function LangLayoutClient({ children, lang }: { children: ReactNode; lang: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const activeTab = getActiveTab(pathname);
   const langPrefix = lang === 'ko' ? '/ko' : '';
   const t = getTranslations(lang as 'en' | 'ko');
+  const pageTitle = t.pageTitle[getPageTitleKey(pathname)];
 
   // 키보드 단축키 (Option/Alt + 숫자) - 입력 필드에서도 동작
   useEffect(() => {
@@ -52,17 +61,18 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
           {/* 헤더 - 고정 높이 */}
           <header className="flex items-center justify-between pb-4 shrink-0 animate-fade-in">
             <div className="flex items-center gap-4">
-              <Link href={`${langPrefix}/generate/v7`}>
-                <h1 className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
+              <Link href={`${langPrefix}/generate/v7`} aria-label="UUID Generator Home">
+                <div className="font-mono text-xl sm:text-2xl font-bold tracking-tight">
                   <span className="text-accent-mint">UUID</span>
                   <span className="text-text-primary">::</span>
                   <span className="text-text-secondary">GEN</span>
-                </h1>
+                </div>
               </Link>
               <span className="hidden sm:inline-flex px-2 py-0.5 text-xs font-mono uppercase border border-border-subtle text-text-muted">
                 v1.0.0
               </span>
             </div>
+            <h1 className="sr-only">{pageTitle}</h1>
 
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-text-muted">
