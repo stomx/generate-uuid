@@ -112,7 +112,7 @@ export function LangLayoutClient({ children, lang }: { children: ReactNode; lang
                   role="tabpanel"
                   id={`panel-${activeTab}`}
                   aria-labelledby={`tab-${activeTab}`}
-                  className="flex-1 overflow-y-auto min-h-0 p-1 -m-1"
+                  className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 p-1 -m-1"
                 >
                   {children}
                 </div>

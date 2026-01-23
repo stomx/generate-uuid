@@ -5,13 +5,15 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui';
 import { VersionSelector } from './VersionSelector';
 import { OptionsPanel } from './OptionsPanel';
+import { UuidInfoSection } from './UuidInfoSection';
+import type { Locale } from '@/lib/i18n';
 import { useUuidGenerator } from '@/hooks';
 import { copyToClipboard } from '@/lib/utils/clipboard';
 import type { SupportedUuidVersion } from '@/types/uuid';
 
 interface UuidGeneratorProps {
   initialVersion?: SupportedUuidVersion;
-  lang?: string;
+  lang?: Locale;
 }
 
 export function UuidGenerator({ initialVersion, lang = 'en' }: UuidGeneratorProps) {
@@ -133,7 +135,7 @@ export function UuidGenerator({ initialVersion, lang = 'en' }: UuidGeneratorProp
   const isSingle = uuids.length === 1;
 
   return (
-    <div className="flex flex-col h-full min-h-0 gap-3 sm:gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {/* Version Selector */}
       <div className="shrink-0">
         <VersionSelector selected={version} onChange={handleVersionChange} />
@@ -216,7 +218,7 @@ export function UuidGenerator({ initialVersion, lang = 'en' }: UuidGeneratorProp
           aria-label="생성된 UUID"
           data-testid="uuid-display"
           className="
-            block w-full min-h-[80px] sm:min-h-[120px]
+            flex flex-col w-full min-h-[80px] sm:min-h-[120px]
             bg-bg-surface border border-border-subtle
             font-mono text-text-primary
             relative
@@ -224,9 +226,9 @@ export function UuidGenerator({ initialVersion, lang = 'en' }: UuidGeneratorProp
         >
           {/* Inner container - always single column */}
           <div className={`
-            min-h-full p-2 sm:p-3
+            flex-1 p-2 sm:p-3
             ${isSingle
-              ? 'flex items-center justify-center py-4 sm:h-full'
+              ? 'flex items-center justify-center'
               : 'flex flex-col gap-0.5 sm:gap-1'
             }
           `}>
@@ -286,6 +288,11 @@ export function UuidGenerator({ initialVersion, lang = 'en' }: UuidGeneratorProp
           </div>
         </output>
 
+      </div>
+
+      {/* UUID Info Section - Collapsible */}
+      <div className="mt-3 sm:mt-4">
+        <UuidInfoSection version={version} lang={lang} />
       </div>
 
       {/* Error message - 고정 높이, opacity로 토글 */}
