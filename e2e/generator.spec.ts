@@ -174,3 +174,67 @@ test.describe('Keyboard Shortcuts', () => {
     await expect(page.locator('#panel-generator')).toBeVisible();
   });
 });
+
+test.describe('UUID Info Section', () => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'Desktop tests only');
+    await page.goto('/');
+  });
+
+  test('접이식 정보 섹션이 표시되어야 함', async ({ page }) => {
+    const infoButton = page.locator('button[aria-controls="uuid-info-content"]');
+    await expect(infoButton).toBeVisible();
+    await expect(infoButton).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('클릭 시 정보 섹션이 펼쳐져야 함', async ({ page }) => {
+    const infoButton = page.locator('button[aria-controls="uuid-info-content"]');
+
+    await infoButton.click();
+    await expect(infoButton).toHaveAttribute('aria-expanded', 'true');
+
+    // 콘텐츠가 보여야 함
+    const content = page.locator('#uuid-info-content');
+    await expect(content).toBeVisible();
+  });
+
+  test('다시 클릭 시 정보 섹션이 접혀야 함', async ({ page }) => {
+    const infoButton = page.locator('button[aria-controls="uuid-info-content"]');
+
+    await infoButton.click(); // 펼치기
+    await infoButton.click(); // 접기
+
+    await expect(infoButton).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('버전별 정보가 표시되어야 함', async ({ page }) => {
+    const infoButton = page.locator('button[aria-controls="uuid-info-content"]');
+
+    // V7 (기본)
+    await infoButton.click();
+    await expect(page.locator('text=About UUID v7')).toBeVisible();
+    await infoButton.click(); // 닫기
+
+    // V1으로 전환
+    await page.click('button:has-text("V1")');
+    await page.waitForTimeout(100);
+    await infoButton.click();
+    await expect(page.locator('text=About UUID v1')).toBeVisible();
+    await infoButton.click(); // 닫기
+
+    // V4로 전환
+    await page.click('button:has-text("V4")');
+    await page.waitForTimeout(100);
+    await infoButton.click();
+    await expect(page.locator('text=About UUID v4')).toBeVisible();
+  });
+
+  test('한국어 페이지에서 한국어 정보가 표시되어야 함', async ({ page }) => {
+    await page.goto('/ko/generate/v7');
+
+    const infoButton = page.locator('button[aria-controls="uuid-info-content"]');
+    await infoButton.click();
+
+    await expect(page.locator('text=UUID v7이란?')).toBeVisible();
+  });
+});
