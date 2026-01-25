@@ -29,7 +29,7 @@ UUID Generator - 온라인 UUID 생성/검증/파싱 도구 (uuid.stomx.net)
 - 페이지별 고유 H1 (`sr-only` 클래스로 숨김, SEO용)
 - 자기 참조 canonical + hreflang 태그
 - 페이지별 동적 Breadcrumb 스키마
-- `public/sitemap.xml` - 14개 URL (영어 7개 + 한국어 7개)
+- `public/sitemap.xml` - 10개 URL (영어 5개 + 한국어 5개, 리디렉션 페이지 제외)
 
 ### 번역 구조
 `lib/i18n/translations.ts`에서 타입 안전한 번역 관리:
